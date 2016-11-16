@@ -33,7 +33,7 @@ public class Level {
 	public Level(GameScreen game, String name) {
 		this.game = game;
 		map = new TmxMapLoader(new InternalFileHandleResolver()).load("levels/"+name+".tmx");
-		entities = new ArrayList<>();
+		entities = new ArrayList<Entity>();
 		cameraPosition = new Vector2().set(0, 0);
 		
 		tileRenderer = new OrthogonalTiledMapRenderer(map);

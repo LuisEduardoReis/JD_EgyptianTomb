@@ -15,7 +15,7 @@ public class JDGame extends Game {
 	}
 	public static HashMap<Keys,Integer> keyBindings;
 	public static void initKeyBindings() {
-		keyBindings = new HashMap<>();
+		keyBindings = new HashMap<Keys, Integer>();
 		keyBindings.put(Keys.UP,Input.Keys.UP);
 		keyBindings.put(Keys.DOWN,Input.Keys.DOWN);
 		keyBindings.put(Keys.LEFT,Input.Keys.LEFT);
