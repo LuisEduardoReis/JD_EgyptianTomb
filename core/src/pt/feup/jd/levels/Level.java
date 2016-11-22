@@ -22,7 +22,7 @@ public class Level {
 	public TiledMap map;
 	Tile[] tiles;
 	int map_width, map_height;
-	Player player;
+	public Player player;
 	ArrayList<Entity> entities;
 	
 	Vector2 cameraPosition;

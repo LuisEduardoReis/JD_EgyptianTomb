@@ -24,22 +24,26 @@ public class Player extends Entity {
 	public Player(Level level) {
 		super(level);
 		
+		this.x = 200;
+		this.y = 200;
+		
 		if (!initSprites) initSprites();
 		
-		this.width = 16;
-		this.height = 16;		
+		this.hx = 48;
+		this.hy = 48;		
 	}
 	
 	@Override
 	public void update(float delta) {
-		float s = 10;
-		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && onGround()) dy = s;
-		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.LEFT))) dx = -s;
-		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.RIGHT))) dx = s;
-		
-		if (onGround()) fx = 0.50f; else fx = 0.85f;
-		
 		super.update(delta);
+		
+		float s = 10;
+		//if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && onGround()) vy = s;
+		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) vy = s;
+		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.DOWN))) vy = -s;
+		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.LEFT))) vx = -s;
+		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.RIGHT))) vx = s;
+
 	}
 	
 	@Override

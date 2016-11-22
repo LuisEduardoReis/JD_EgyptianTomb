@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -24,6 +25,7 @@ public class GameScreen extends ScreenAdapter {
 	OrthographicCamera camera;
 	Viewport viewport;
 	
+	BitmapFont font;
 	SpriteBatch batch;
 	
 	@Override
@@ -37,6 +39,7 @@ public class GameScreen extends ScreenAdapter {
 		camera = new OrthographicCamera();
 		viewport = new ScreenViewport(camera);
 		
+		font = new BitmapFont();
 		batch = new SpriteBatch();
 	}
 	
@@ -67,8 +70,16 @@ public class GameScreen extends ScreenAdapter {
 		batch.begin(); 
 			level.renderEntities(batch);
 			//batch.draw(Assets.testImage,0,0);
-		batch.end();	
+		batch.end();
+		
+		camera.position.set(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
+		camera.update();
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+			font.draw(batch, "vx:" + level.player.vx + "; vy:" + level.player.vy,20,20);
+		batch.end();
 	}
+	
 	
 	@Override
 	public void resize(int width, int height) {
