@@ -31,14 +31,16 @@ public class Entity {
 		this.colideWithLevel=true;
 	}
 	
-	public void update(float delta) {
+	public void preupdate(float delta) {
 		px = x;
 		py = y;
-		
+	}
+	public void update(float delta) {
 		vy-=10*delta;
 		vx*=fx;
 		//vy*=fy;
-		
+	}
+	public void postupdate(float delta) {
 		x += vx;
 		y += vy;
 	}
@@ -54,11 +56,9 @@ public class Entity {
 	
 	public boolean onGround() {
 		int ts = JDGame.TILE_SIZE;
-		int cx = (int) (x / ts);
-		int cy = (int) (y / ts);
-		float yr = (y / ts) - cy;
-		float lowerY = ((float)(ts/2 - hy/2))/ts;
-		return level.getTile(cx,cy-1).solid && yr <= lowerY;
+		int cx = (int) Math.floor(x / ts);
+		int cy = (int) Math.floor((y-hy*0.6f) / ts);
+		return level.getTile(cx,cy).solid;
 	}
 
 	public static Vector2 v1 = new Vector2(), v2 = new Vector2();
@@ -70,11 +70,11 @@ public class Entity {
 		while(true) {
 		
 			float dx = x - px, dy = y - py;
-			int minXi = (int) (Math.min(x, px)-hx/2)/ts, maxXi = (int)(Math.max(x, px)+hx/2)/ts;
-			int minYi = (int) (Math.min(y, py)-hy/2)/ts, maxYi = (int)(Math.max(y, py)+hy/2)/ts;
+			int minXi = (int) Math.floor((Math.min(x, px)-hx/2)/ts), maxXi = (int)Math.floor((Math.max(x, px)+hx/2)/ts);
+			int minYi = (int) Math.floor((Math.min(y, py)-hy/2)/ts), maxYi = (int)Math.floor((Math.max(y, py)+hy/2)/ts);
 			
 			float r = 1; Vector2 n = v1.set(0, 0);
-			
+	
 			for(int yi = minYi; yi <= maxYi; yi++) {
 			for(int xi = minXi; xi <= maxXi; xi++) {
 				if (!level.getTile(xi, yi).solid) continue;
@@ -95,8 +95,8 @@ public class Entity {
 			
 			if (r == 1) break;
 			else {
-				if (n.x != 0) dx = 0;
-				if (n.y != 0) dy = 0;
+				if (n.x != 0) vx = 0;
+				if (n.y != 0) vy = 0;
 			}
 			
 			float BdotB = n.x*n.x + n.y*n.y;
@@ -109,8 +109,7 @@ public class Entity {
 				y += (1-r)*dy - (AdotB/BdotB)*n.y;
 			}
 		}
-		
-		
+
 		
 	}
 }

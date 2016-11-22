@@ -62,21 +62,21 @@ public class GameScreen extends ScreenAdapter {
 		viewport.apply();
 		
 		camera.position.set(level.getCameraPosition(),0);
-		camera.update();
+		camera.update();	
 		
 		level.renderTiles(camera);
 		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin(); 
 			level.renderEntities(batch);
-			//batch.draw(Assets.testImage,0,0);
 		batch.end();
 		
 		camera.position.set(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-			font.draw(batch, "vx:" + level.player.vx + "; vy:" + level.player.vy,20,20);
+			font.draw(batch, "v(" + level.player.vx + "; " + level.player.vy+")",20,20);
+			font.draw(batch, "p(" + level.player.x + "; " + level.player.y+")",20,40);
 		batch.end();
 	}
 	

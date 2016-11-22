@@ -21,7 +21,7 @@ public class Level {
 	// Logic
 	public TiledMap map;
 	Tile[] tiles;
-	int map_width, map_height;
+	public int map_width, map_height;
 	public Player player;
 	ArrayList<Entity> entities;
 	
@@ -58,7 +58,9 @@ public class Level {
 	}
 
 	public void update(float delta) {
+		for(Entity e : entities) e.preupdate(delta);
 		for(Entity e : entities) e.update(delta);
+		for(Entity e : entities) e.postupdate(delta);
 		for(Entity e : entities) e.levelCollision();
 		if (player != null) cameraPosition.set((int) player.x, (int) player.y);
 	}

@@ -38,9 +38,9 @@ public class Player extends Entity {
 		super.update(delta);
 		
 		float s = 10;
-		//if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && onGround()) vy = s;
-		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) vy = s;
-		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.DOWN))) vy = -s;
+		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && onGround()) vy = s;
+		//if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) vy = s;
+		//if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.DOWN))) vy = -s;
 		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.LEFT))) vx = -s;
 		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.RIGHT))) vx = s;
 
