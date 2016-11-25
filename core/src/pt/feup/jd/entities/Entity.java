@@ -1,6 +1,9 @@
 package pt.feup.jd.entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
 
 import pt.feup.jd.JDGame;
@@ -8,6 +11,13 @@ import pt.feup.jd.levels.Collision;
 import pt.feup.jd.levels.Level;
 
 public class Entity {
+	
+	public static enum Direction {
+		UP(0,1,90f), DOWN(0,-1,270f), LEFT(-1,0,180f), RIGHT(1,0,0f); 
+		public int x, y; 
+		public float dir;
+		Direction(int xx, int yy, float d) {x = xx; y = yy; dir = d;}
+	};
 	
 	public static final float GRAVITY = 15*JDGame.TILE_SIZE;
 
@@ -18,22 +28,36 @@ public class Entity {
 	public int hx, hy;
 	public float vx, vy;
 	public float fx,fy;
+	public Direction direction;
 	
 	public boolean colideWithLevel;
 	public boolean applyGravity;
+	
+	public TextureRegion[] sprite;
+	public float anim_timer, anim_delay, anim_speed; 
+	public int anim_index; 
+	public boolean anim_loop;
 	
 	
 	public Entity(Level level) {
 		this.level = level;
 		
-		this.hx = 32;
-		this.hy = 32;
+		hx = 32;
+		hy = 32;
 		
-		this.fx = 0.85f;
-		this.fy = 0.85f;
+		fx = 0.85f;
+		fy = 0.85f;
 		
-		this.colideWithLevel=true;
-		this.applyGravity=true;
+		colideWithLevel=true;
+		applyGravity=true;
+		
+		anim_loop = true;
+		anim_timer = 0;
+		anim_delay = -1;
+		anim_index = 0;
+		anim_speed = 1;
+		
+		direction = Direction.RIGHT;
 	}
 	
 	public void preupdate(float delta) {
@@ -41,15 +65,50 @@ public class Entity {
 		py = y;
 	}
 	public void update(float delta) {
+		// Physics
 		if (applyGravity) vy-=GRAVITY*delta;
+		
+		// Animation
+		if (sprite != null) {
+			if (anim_delay > 0) {
+				anim_timer += delta * anim_speed;
+				while (anim_timer > anim_delay) {
+					anim_index++;			
+					anim_timer -= anim_delay;
+				}
+				if (!anim_loop && anim_index >= sprite.length) anim_index = sprite.length-1;
+			} else {
+				anim_index = 0;
+			}
+		}
 	}
 	public void postupdate(float delta) {
 		x += vx*delta;
 		y += vy*delta;
+		
+		anim_index %= sprite.length;
 	}
 	
+	static Affine2 t = new Affine2();
+	static Color color = new Color();
 	public void render(SpriteBatch batch) {
+		int ts = JDGame.TILE_SIZE;
 		
+		TextureRegion s = null;
+		float scaleX = (direction == Direction.LEFT) ?  -1 : 1;
+	
+		s = sprite[anim_index];
+		
+		t.idt();
+		t.translate((int) x, (int) y);
+		t.scale(scaleX, 1);
+		t.translate(-ts/2, -ts/2);
+	
+		
+		color.set(Color.WHITE);
+		batch.setColor(color);
+		batch.draw(s, ts, ts, t);
+		batch.setColor(Color.WHITE);
 	}
 	
 	public void moveTo(float x, float y) {
@@ -57,14 +116,6 @@ public class Entity {
 		this.y = this.py = y;
 	}
 	
-	public boolean onGround() {
-		if (vy > 0) return false;
-		int ts = JDGame.TILE_SIZE;
-		int cx = (int) Math.floor(x / ts);
-		int cy = (int) Math.floor((y - (hy*0.5f) - 5) / ts);
-		return level.getTile(cx,cy).solid;
-	}
-
 	public static Vector2 v1 = new Vector2(), v2 = new Vector2();
 	public void levelCollision() {
 		if (!colideWithLevel) return;
