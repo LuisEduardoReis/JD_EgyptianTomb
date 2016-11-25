@@ -8,6 +8,9 @@ import pt.feup.jd.levels.Collision;
 import pt.feup.jd.levels.Level;
 
 public class Entity {
+	
+	public static final float GRAVITY = 15*JDGame.TILE_SIZE;
+
 	public Level level;
 	
 	public float x,y;
@@ -17,6 +20,7 @@ public class Entity {
 	public float fx,fy;
 	
 	public boolean colideWithLevel;
+	public boolean applyGravity;
 	
 	
 	public Entity(Level level) {
@@ -29,6 +33,7 @@ public class Entity {
 		this.fy = 0.85f;
 		
 		this.colideWithLevel=true;
+		this.applyGravity=true;
 	}
 	
 	public void preupdate(float delta) {
@@ -36,13 +41,11 @@ public class Entity {
 		py = y;
 	}
 	public void update(float delta) {
-		vy-=10*delta;
-		vx*=fx;
-		//vy*=fy;
+		if (applyGravity) vy-=GRAVITY*delta;
 	}
 	public void postupdate(float delta) {
-		x += vx;
-		y += vy;
+		x += vx*delta;
+		y += vy*delta;
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -55,9 +58,10 @@ public class Entity {
 	}
 	
 	public boolean onGround() {
+		if (vy > 0) return false;
 		int ts = JDGame.TILE_SIZE;
 		int cx = (int) Math.floor(x / ts);
-		int cy = (int) Math.floor((y-hy*0.6f) / ts);
+		int cy = (int) Math.floor((y - (hy*0.5f) - 5) / ts);
 		return level.getTile(cx,cy).solid;
 	}
 
