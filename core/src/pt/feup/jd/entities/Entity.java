@@ -3,6 +3,7 @@ package pt.feup.jd.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
 
@@ -129,6 +130,11 @@ public class Entity {
 		batch.setColor(Color.WHITE);
 	}
 	
+	public void renderDebug(ShapeRenderer renderer) {
+		renderer.setColor(1,1,1,1);
+		renderer.rect((int)(x-hx/2),(int)(y-hy/2),hx,hy);
+	}
+	
 	public static Vector2 v1 = new Vector2(), v2 = new Vector2();
 	public void checkLevelCollision() {
 		if (!colideWithLevel) return;
@@ -195,4 +201,5 @@ public class Entity {
 		return this;
 	}
 	public Entity moveTo(Vector2 v) { return moveTo(v.x,v.y); }
+
 }

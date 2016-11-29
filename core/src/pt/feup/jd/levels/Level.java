@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -48,6 +49,7 @@ public class Level {
 		map_width = (Integer) map.getProperties().get("width");
 		map_height = (Integer) map.getProperties().get("height");
 		tiles = new Tile[map_width*map_height];
+		
 		for(int i = 0; i < tiles.length; i++) tiles[i] = Tile.AIR;
 		
 		TiledMapTileLayer tiled_tiles = (TiledMapTileLayer) map.getLayers().get("solid"); 
@@ -104,25 +106,42 @@ public class Level {
 
 	
 	public void update(float delta) {
+		// Preupdate
 		for(Entity e : entities) e.preupdate(delta);
+		
+		// Update
 		for(Entity e : entities) e.update(delta);
+		
+		// Triggers
 		if (player != null) { for(Trigger t : triggers.values()) {
 			if (Collision.aabbToaabb(player.x, player.y, player.hx, player.hy, t.x, t.y, t.w, t.h))
 				t.activate();
 		}}
+		
+		// Entity collisions
+		for(Entity e : entities) { for(Entity o : entities) {
+			if (e == o) continue;
+			if (Collision.aabbToaabb(e.x-e.hx/2, e.y-e.hy/2, e.hx, e.hy, o.x-o.hx/2, o.y-o.hy/2, o.hx, o.hy)) {
+				e.entityCollision(o);
+			}
+		}}
+		
+		// New entities
 		entities.addAll(newEntities);
 		newEntities.clear();
+		
+		// Remove old entities
 		for(int i = 0; i < entities.size(); i++) 
 			if (entities.get(i).remove)
 				entities.remove(i);
+		
+		// Post update
 		for(Entity e : entities) e.postupdate(delta);
-		for(Entity e : entities) e.checkLevelCollision();
-		for(Entity e : entities) { for(Entity o : entities) {
-			if (e == o) continue;
-			if (Collision.aabbToaabb(e.x, e.y, e.hx, e.hy, o.x, o.y, o.hx, o.hy)) {
-				e.entityCollision(o);
-			}
-		}} 
+		
+		// Level collisions
+		for(Entity e : entities) e.checkLevelCollision(); 
+		
+		// Camera position
 		if (player != null) cameraPosition.set((int) player.x, (int) player.y);
 	}
 
@@ -134,6 +153,10 @@ public class Level {
 	public void renderTiles(OrthographicCamera camera) {
 		tileRenderer.setView(camera);
 		tileRenderer.render();
+	}
+	
+	public void renderDebug(ShapeRenderer shapeRenderer) {
+		for(Entity e : entities) e.renderDebug(shapeRenderer);
 	}
 
 	public Vector2 getCameraPosition() { return cameraPosition; }
