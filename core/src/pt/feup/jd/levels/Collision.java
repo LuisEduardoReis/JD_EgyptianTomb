@@ -57,5 +57,16 @@ public class Collision {
 	    // return n.(v-p) / n.u
 	    return (nx*(vx-px) + ny*(vy-py)) / NdotU;
 	}
+	
+	public static boolean aabbToaabb(
+			float x1, float y1, float w1, float h1,  
+			float x2, float y2, float w2, float h2) {
+		float x = x1 - (x2+w2);
+		float y = y1 - (y2+h2);
+		float w = w1 + w2;
+		float h = h1 + h2;
+		
+		return x <= 0 && y <= 0 && x+w >= 0 && y+h >= 0;
+	}
 }
 

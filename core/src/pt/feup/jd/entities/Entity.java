@@ -27,29 +27,35 @@ public class Entity {
 	public float px,py;
 	public int hx, hy;
 	public float vx, vy;
-	public float fx,fy;
 	public Direction direction;
 	
 	public boolean colideWithLevel;
+	public float bounciness;
 	public boolean applyGravity;
 	
+	public boolean visible = true;
 	public TextureRegion[] sprite;
 	public float anim_timer, anim_delay, anim_speed; 
 	public int anim_index; 
 	public boolean anim_loop;
 	
+	public float health;
+	public boolean dead;
+	
+	public boolean remove = true;
 	
 	public Entity(Level level) {
 		this.level = level;
+		level.addEntity(this);
 		
 		hx = 32;
 		hy = 32;
-		
-		fx = 0.85f;
-		fy = 0.85f;
-		
+				
 		colideWithLevel=true;
+		bounciness=0; 
 		applyGravity=true;
+		
+		visible = true;
 		
 		anim_loop = true;
 		anim_timer = 0;
@@ -58,6 +64,9 @@ public class Entity {
 		anim_speed = 1;
 		
 		direction = Direction.RIGHT;
+		
+		health = 100;
+		remove = false;
 	}
 	
 	public void preupdate(float delta) {
@@ -65,8 +74,10 @@ public class Entity {
 		py = y;
 	}
 	public void update(float delta) {
-		// Physics
+		// Logic
 		if (applyGravity) vy-=GRAVITY*delta;
+		
+		if (health <= 0 && !dead) die(); 
 		
 		// Animation
 		if (sprite != null) {
@@ -82,6 +93,11 @@ public class Entity {
 			}
 		}
 	}
+	private void die() {
+		dead = true;
+		remove = true;		
+	}
+
 	public void postupdate(float delta) {
 		x += vx*delta;
 		y += vy*delta;
@@ -92,6 +108,8 @@ public class Entity {
 	static Affine2 t = new Affine2();
 	static Color color = new Color();
 	public void render(SpriteBatch batch) {
+		if (!visible) return;
+		
 		int ts = JDGame.TILE_SIZE;
 		
 		TextureRegion s = null;
@@ -111,13 +129,8 @@ public class Entity {
 		batch.setColor(Color.WHITE);
 	}
 	
-	public void moveTo(float x, float y) {
-		this.x = this.px = x;
-		this.y = this.py = y;
-	}
-	
 	public static Vector2 v1 = new Vector2(), v2 = new Vector2();
-	public void levelCollision() {
+	public void checkLevelCollision() {
 		if (!colideWithLevel) return;
 		
 		int ts = JDGame.TILE_SIZE;
@@ -150,8 +163,9 @@ public class Entity {
 			
 			if (r == 1) break;
 			else {
-				if (n.x != 0) vx = 0;
-				if (n.y != 0) vy = 0;
+				levelCollision(n.x,n.y);
+				if (n.x != 0) vx = -bounciness*vx;
+				if (n.y != 0) vy = -bounciness*vy;
 			}
 			
 			float BdotB = n.x*n.x + n.y*n.y;
@@ -167,4 +181,18 @@ public class Entity {
 
 		
 	}
+	
+	public void levelCollision(float x, float y) {		
+	}
+
+	public void entityCollision(Entity other) {
+		
+	}
+	
+	public Entity moveTo(float x, float y) {
+		this.x = this.px = x;
+		this.y = this.py = y;
+		return this;
+	}
+	public Entity moveTo(Vector2 v) { return moveTo(v.x,v.y); }
 }

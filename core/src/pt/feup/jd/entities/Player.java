@@ -10,7 +10,7 @@ import pt.feup.jd.levels.Level;
 
 public class Player extends Entity {
 	
-	public static final float MOVE_SPEED = 6*JDGame.TILE_SIZE;
+	public static final float MOVE_SPEED = 5*JDGame.TILE_SIZE;
 	public static final float JUMP_SPEED = (float) Math.sqrt(2*Entity.GRAVITY*2.5*JDGame.TILE_SIZE); 
 	
 	static TextureRegion idle_anim[];
@@ -30,34 +30,41 @@ public class Player extends Entity {
 	float jumpWindow, jumpWindowDelay;
 	boolean jumped;
 	
+	float gun_delay, gun_timer;
+	
 	public Player(Level level) {
 		super(level);
 		
-		x = 200;
-		y = 200;
+		x = 0;
+		y = 0;
 		
 		if (!initSprites) initSprites();
 		
 		hx = 24;
 		hy = 52;		
 		
-		jumpWindowDelay = 0.5f;
+		jumpWindowDelay = 0.25f;
 		
 		sprite = walk_anim;
 		anim_delay = 1/8f;
+		
+		gun_timer = 0;
+		gun_delay = 0.25f;
 	}
 	
 	public boolean onGround() {
 		if (vy > 0) return false;
 		int ts = JDGame.TILE_SIZE;
 		int cx = (int) Math.floor(x / ts);
-		int cy = (int) Math.floor((y - (hy*0.5f) - 5) / ts);
+		int cy = (int) Math.floor((y - (hy*0.5f) - 4) / ts);
 		return level.getTile(cx,cy).solid;
 	}
 	
 	@Override
 	public void update(float delta) {
 		super.update(delta);
+		
+		// Movement
 		if (onGround()) {
 			jumpWindow = jumpWindowDelay;
 			jumped = false;
@@ -86,7 +93,16 @@ public class Player extends Entity {
 			vx = 0;
 			anim_speed = 0;
 		}
-
+		
+		// Weapon
+		gun_timer = Util.stepTo(gun_timer, 0, delta);
+		if (gun_timer == 0 && Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.FIRE))) {
+			Bullet b = (Bullet) new Bullet(level).moveTo(x, y);
+			float s = 7.5f*JDGame.TILE_SIZE;
+			b.vx = (direction == Direction.RIGHT) ? s : -s;
+			
+			gun_timer = gun_delay;
+		}
 	}
 	
 
