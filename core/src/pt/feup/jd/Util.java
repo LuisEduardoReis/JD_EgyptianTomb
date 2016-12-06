@@ -11,7 +11,7 @@ public class Util {
 		return x >= a && x <= b;
 	}
 
-	public static float stepTo(float a, int b, float x) {
+	public static float stepTo(float a, float b, float x) {
 		return Math.abs(a-b) < x ? b : a + Math.signum(b-a)*x;
 	}
 

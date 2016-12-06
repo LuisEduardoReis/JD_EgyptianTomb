@@ -1,5 +1,6 @@
 package pt.feup.jd.entities;
 
+import pt.feup.jd.Util;
 import pt.feup.jd.levels.Level;
 
 public class Enemy extends Entity{
@@ -11,6 +12,10 @@ public class Enemy extends Entity{
 	float walkSpeed;
 	float walkDirection;
 	
+	float contactDamage;
+	float contactDamage_timer, contactDamage_delay;
+
+	
 	public Enemy(Level level) {
 		super(level);
 		
@@ -19,19 +24,25 @@ public class Enemy extends Entity{
 		
 		turnOnBump = false;
 		turnOnEdge = false;
+		
+		contactDamage = 0;
+		contactDamage_timer = 0;
+		contactDamage_delay = 1;
 	}
 	
 	@Override
 	public void update(float delta) {
 		super.update(delta);	
 		
-		vx = walkSpeed * walkDirection;
+		vx = walkSpeed * direction;
 		
 		if (onGround()) turning = false;
 		else if (turnOnEdge && !turning){
 			turning = true;
-			walkDirection = -walkDirection;
+			direction = -direction;
 		}
+		
+		contactDamage_timer = Util.stepTo(contactDamage_timer, 0, delta);
 	}
 	
 	@Override
@@ -42,6 +53,13 @@ public class Enemy extends Entity{
 			health -= ((Bullet) o).damage;
 			o.remove = true;
 		}
+		else
+		if (o instanceof Player) {
+			if (contactDamage > 0 && contactDamage_timer == 0) {
+				o.damage(contactDamage);
+				contactDamage_timer = contactDamage_delay;
+			}
+		}
 	}
 	
 	@Override
@@ -49,7 +67,7 @@ public class Enemy extends Entity{
 		super.levelCollision(nx, ny);
 		
 		if (nx != 0 && turnOnBump) { 
-			walkDirection = -walkDirection; 
+			direction = -direction; 
 		}
 	}
 	

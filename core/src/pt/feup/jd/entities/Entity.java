@@ -2,23 +2,16 @@ package pt.feup.jd.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
 
 import pt.feup.jd.JDGame;
+import pt.feup.jd.Sprite;
+import pt.feup.jd.Util;
 import pt.feup.jd.levels.Collision;
 import pt.feup.jd.levels.Level;
 
 public class Entity {
-	
-	public static enum Direction {
-		UP(0,1,90f), DOWN(0,-1,270f), LEFT(-1,0,180f), RIGHT(1,0,0f); 
-		public int x, y; 
-		public float dir;
-		Direction(int xx, int yy, float d) {x = xx; y = yy; dir = d;}
-	};
 	
 	public static final float GRAVITY = 15*JDGame.TILE_SIZE;
 
@@ -28,19 +21,20 @@ public class Entity {
 	public float px,py;
 	public int hx, hy;
 	public float vx, vy;
-	public Direction direction;
+	public int direction;
 	
 	public boolean colideWithLevel;
 	public float bounciness;
 	public boolean applyGravity;
 	
 	public boolean visible = true;
-	public TextureRegion[] sprite;
-	public float anim_timer, anim_delay, anim_speed; 
-	public int anim_index; 
-	public boolean anim_loop;
+	public Sprite sprite;
+	public float anim_timer, anim_speed; 
+	public int anim_index;
+	
 	
 	public float health;
+	public float damage_anim_timer, damage_anim_delay;
 	public boolean dead;
 	
 	public boolean remove = true;
@@ -58,15 +52,15 @@ public class Entity {
 		
 		visible = true;
 		
-		anim_loop = true;
 		anim_timer = 0;
-		anim_delay = -1;
 		anim_index = 0;
 		anim_speed = 1;
 		
-		direction = Direction.RIGHT;
+		direction = 1;
 		
 		health = 100;
+		damage_anim_timer = 0;
+		damage_anim_delay = 1;
 		remove = false;
 	}
 	
@@ -81,19 +75,27 @@ public class Entity {
 		if (health <= 0 && !dead) die(); 
 		
 		// Animation
+		damage_anim_timer = Util.stepTo(damage_anim_timer, 0, delta);
+		
 		if (sprite != null) {
-			if (anim_delay > 0) {
+			if (sprite.anim_delay > 0) {
 				anim_timer += delta * anim_speed;
-				while (anim_timer > anim_delay) {
+				while (anim_timer > sprite.anim_delay) {
 					anim_index++;			
-					anim_timer -= anim_delay;
+					anim_timer -= sprite.anim_delay;
 				}
-				if (!anim_loop && anim_index >= sprite.length) anim_index = sprite.length-1;
+				if (!sprite.anim_loop && anim_index >= sprite.frames.size()) anim_index = sprite.frames.size()-1;
 			} else {
 				anim_index = 0;
 			}
 		}
 	}
+	
+	public void damage(float damage) {
+		health = Util.stepTo(health, 0, damage);
+		damage_anim_timer = damage_anim_delay;
+	}
+	
 	private void die() {
 		dead = true;
 		remove = true;		
@@ -103,31 +105,29 @@ public class Entity {
 		x += vx*delta;
 		y += vy*delta;
 		
-		anim_index %= sprite.length;
+		if(sprite != null) anim_index %= sprite.frames.size();
 	}
 	
-	static Affine2 t = new Affine2();
-	static Color color = new Color();
+	public void setSprite(Sprite sprite) {
+		if (sprite != this.sprite) {
+			anim_index = 0;
+			anim_timer = 0;
+			this.sprite = sprite;
+		}		
+	}
+
+	public static Color color = new Color();
 	public void render(SpriteBatch batch) {
 		if (!visible) return;
 		
-		int ts = JDGame.TILE_SIZE;
-		
-		TextureRegion s = null;
-		float scaleX = (direction == Direction.LEFT) ?  -1 : 1;
-	
-		s = sprite[anim_index];
-		
-		t.idt();
-		t.translate((int) x, (int) y);
-		t.scale(scaleX, 1);
-		t.translate(-ts/2, -ts/2);
-	
-		
-		color.set(Color.WHITE);
-		batch.setColor(color);
-		batch.draw(s, ts, ts, t);
-		batch.setColor(Color.WHITE);
+		if(sprite != null) {			
+			color.set(1,1,1,1);
+			if (damage_anim_timer > 0) {
+				float s = damage_anim_timer / damage_anim_delay;
+				color.set(1,1-s,1-s,1);
+			}
+			sprite.render(batch,anim_index, x,y, direction, 1, color);
+		}
 	}
 	
 	public void renderDebug(ShapeRenderer renderer) {
