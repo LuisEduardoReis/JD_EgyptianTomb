@@ -219,6 +219,17 @@ public class Entity {
 		int cy = (int) Math.floor((y - (hy*0.5f) - 4) / ts);
 		return level.getTile(cx,cy).solid;
 	}
+	public boolean onGroundWide() {
+		if (vy > 0) return false;
+		int ts = JDGame.TILE_SIZE;
+		int cy = (int) Math.floor((y - (hy*0.5f) - 4) / ts);
+		int mincx = (int) Math.floor((x - hx*0.5f) / ts);
+		int maxcx = (int) Math.floor((x + hx*0.5f) / ts);
+		for(int cx = mincx; cx <= maxcx; cx++)
+			if (level.getTile(cx, cy).solid)
+				return true;
+		return false;
+	}
 	
 	public void addForce(float x, float y) {
 		efx += x;

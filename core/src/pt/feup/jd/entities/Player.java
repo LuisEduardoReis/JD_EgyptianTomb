@@ -15,6 +15,7 @@ public class Player extends Entity {
 	
 	static Sprite idle_anim;
 	static Sprite walk_anim;
+	static Sprite jump_anim;
 	static boolean initSprites = false;
 	static void initSprites() {
 		initSprites = true;
@@ -28,6 +29,9 @@ public class Player extends Entity {
 		walk_anim.addFrame(Assets.sprites64[1][0]);
 		walk_anim.addFrame(Assets.sprites64[1][2]);
 		walk_anim.addFrame(Assets.sprites64[1][0]);
+		
+		jump_anim = new Sprite();
+		jump_anim.addFrame(Assets.sprites64[1][3]);
 	}
 	
 	float jumpWindow, jumpWindowDelay;
@@ -59,17 +63,6 @@ public class Player extends Entity {
 		super.update(delta);
 		
 		// Movement
-		if (onGround()) {
-			jumpWindow = jumpWindowDelay;
-			jumped = false;
-		}
-		jumpWindow = Util.stepTo(jumpWindow,0,delta);
-		
-		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && jumpWindow>0 && !jumped) {
-			vy = JUMP_SPEED;
-			jumped = true;
-		}
-		
 		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.LEFT))) {
 			vx = -MOVE_SPEED;
 			direction = -1;
@@ -84,6 +77,25 @@ public class Player extends Entity {
 			setSprite(idle_anim);
 			vx = 0;
 		}
+		
+		
+		if (onGroundWide()) {
+			jumpWindow = jumpWindowDelay;
+			jumped = false;
+		} else {
+			setSprite(jump_anim);
+		}
+		
+		jumpWindow = Util.stepTo(jumpWindow,0,delta);
+		
+		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && jumpWindow>0 && !jumped) {
+			vy = JUMP_SPEED;
+			jumped = true;
+		}
+		
+		
+		
+		
 		
 		// Weapon
 		gun_timer = Util.stepTo(gun_timer, 0, delta);
