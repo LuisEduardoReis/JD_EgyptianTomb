@@ -25,6 +25,12 @@ public class Snake extends Enemy {
 		
 		hx = 48;
 		hy = 48;
+		
+		vx = 32;
+		
+		walkSpeed = 64;
+		turnOnBump = true;
+		turnOnEdge = true;
 	}
 
 }

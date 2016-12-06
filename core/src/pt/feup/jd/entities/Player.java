@@ -52,14 +52,6 @@ public class Player extends Entity {
 		gun_delay = 0.25f;
 	}
 	
-	public boolean onGround() {
-		if (vy > 0) return false;
-		int ts = JDGame.TILE_SIZE;
-		int cx = (int) Math.floor(x / ts);
-		int cy = (int) Math.floor((y - (hy*0.5f) - 4) / ts);
-		return level.getTile(cx,cy).solid;
-	}
-	
 	@Override
 	public void update(float delta) {
 		super.update(delta);
