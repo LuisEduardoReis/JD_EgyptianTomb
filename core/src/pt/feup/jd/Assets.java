@@ -8,7 +8,7 @@ public class Assets {
 
 	public static Texture testImage;
 	public static Texture spritesheet;
-	public static TextureRegion[][] sprites;
+	public static TextureRegion[][] sprites64, sprites32;
 	
 	public static void createAssets() {
 		
@@ -17,10 +17,15 @@ public class Assets {
 		testImage = new Texture("badlogic.jpg");
 		spritesheet = new Texture("spritesheet.png");
 		spritesheet.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		sprites = TextureRegion.split(spritesheet, l, l);
-		for(int i = 0; i < sprites.length; i++)
-			for(int j = 0; j < sprites[i].length; j++) 
-				Util.fixBleeding(sprites[i][j]);
+		sprites64 = TextureRegion.split(spritesheet, l, l);
+		sprites32 = TextureRegion.split(spritesheet, l/2, l/2);
+		
+		for(int i = 0; i < sprites64.length; i++)
+			for(int j = 0; j < sprites64[i].length; j++) 
+				Util.fixBleeding(sprites64[i][j]);
+		for(int i = 0; i < sprites32.length; i++)
+			for(int j = 0; j < sprites32[i].length; j++) 
+				Util.fixBleeding(sprites32[i][j]);
 		
 	}
 }

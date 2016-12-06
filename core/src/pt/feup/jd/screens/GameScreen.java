@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import pt.feup.jd.Assets;
 import pt.feup.jd.JDGame;
 import pt.feup.jd.levels.Level;
 
@@ -38,7 +39,6 @@ public class GameScreen extends ScreenAdapter {
 	public void show() {
 		
 		// Logic
-		
 		level = new Level(this, "testing");
 	
 		// Render
@@ -92,10 +92,16 @@ public class GameScreen extends ScreenAdapter {
 		}
 		
 		// HUD
-		camera.position.set(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
+		int sw = viewport.getScreenWidth(), sh = viewport.getScreenHeight();
+		camera.position.set(sw/2,sh/2,0);
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+			// Health
+			float health = level.player.health;
+			for(int i = 0; i < health/10; i++) batch.draw(Assets.sprites32[4][1], 16*i, sh-32);
+			
+			// Aux
 			font.draw(batch, "v(" + level.player.vx + "; " + level.player.vy+")",20,20);
 			font.draw(batch, "p(" + level.player.x + "; " + level.player.y+")",20,40);
 		batch.end();

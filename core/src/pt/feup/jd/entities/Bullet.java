@@ -11,7 +11,7 @@ public class Bullet extends Entity {
 	static void initSprites() {
 		initSprites = true;
 		default_anim = new Sprite();
-		default_anim.addFrame(Assets.sprites[3][0]);
+		default_anim.addFrame(Assets.sprites64[3][0]);
 	}
 	
 	float damage;

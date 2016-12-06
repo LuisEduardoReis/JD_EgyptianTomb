@@ -23,6 +23,8 @@ public class Entity {
 	public float vx, vy;
 	public int direction;
 	
+	public float efx, efy, eff;
+	
 	public boolean colideWithLevel;
 	public float bounciness;
 	public boolean applyGravity;
@@ -62,6 +64,10 @@ public class Entity {
 		damage_anim_timer = 0;
 		damage_anim_delay = 1;
 		remove = false;
+		
+		efx = 0;
+		efy = 0;
+		eff = 0.95f;
 	}
 	
 	public void preupdate(float delta) {
@@ -89,6 +95,10 @@ public class Entity {
 				anim_index = 0;
 			}
 		}
+		
+		// External force
+		efx *= eff;
+		efy *= eff;
 	}
 	
 	public void damage(float damage) {
@@ -102,8 +112,8 @@ public class Entity {
 	}
 
 	public void postupdate(float delta) {
-		x += vx*delta;
-		y += vy*delta;
+		x += (vx+efx)*delta;
+		y += (vy+efy)*delta;
 		
 		if(sprite != null) anim_index %= sprite.frames.size();
 	}
@@ -208,6 +218,11 @@ public class Entity {
 		int cx = (int) Math.floor(x / ts);
 		int cy = (int) Math.floor((y - (hy*0.5f) - 4) / ts);
 		return level.getTile(cx,cy).solid;
+	}
+	
+	public void addForce(float x, float y) {
+		efx += x;
+		efy += y;		
 	}
 
 }

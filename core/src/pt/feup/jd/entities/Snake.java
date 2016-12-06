@@ -11,7 +11,7 @@ public class Snake extends Enemy {
 	static void initSprites() {
 		initSprites = true;
 		default_anim = new Sprite();
-		default_anim.addFrame(Assets.sprites[4][0]);
+		default_anim.addFrame(Assets.sprites64[4][0]);
 	}
 	
 	

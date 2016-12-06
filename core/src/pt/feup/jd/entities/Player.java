@@ -17,15 +17,17 @@ public class Player extends Entity {
 	static Sprite walk_anim;
 	static boolean initSprites = false;
 	static void initSprites() {
+		initSprites = true;
+		
 		idle_anim = new Sprite();
-		idle_anim.addFrame(Assets.sprites[1][0]);
+		idle_anim.addFrame(Assets.sprites64[1][0]);
 		
 		walk_anim = new Sprite();
 		walk_anim.anim_delay = 1/8f;
-		walk_anim.addFrame(Assets.sprites[1][0]);
-		walk_anim.addFrame(Assets.sprites[1][1]);
-		walk_anim.addFrame(Assets.sprites[1][0]);
-		walk_anim.addFrame(Assets.sprites[1][2]);		
+		walk_anim.addFrame(Assets.sprites64[1][1]);
+		walk_anim.addFrame(Assets.sprites64[1][0]);
+		walk_anim.addFrame(Assets.sprites64[1][2]);
+		walk_anim.addFrame(Assets.sprites64[1][0]);
 	}
 	
 	float jumpWindow, jumpWindowDelay;
