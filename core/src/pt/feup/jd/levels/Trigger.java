@@ -6,6 +6,7 @@ public class Trigger {
 	
 	Level level;
 	String name, targetLevel, targetSpawn;
+	boolean activateTrap;
 	
 	float x,y,w,h;
 
@@ -16,6 +17,8 @@ public class Trigger {
 		targetLevel = o.getProperties().containsKey("targetLevel") ? (String) o.getProperties().get("targetLevel") : null;
 		targetSpawn = o.getProperties().containsKey("targetSpawn") ? (String) o.getProperties().get("targetSpawn") : null;
 		
+		activateTrap = o.getProperties().containsKey("activateTrap");
+		
 		x = o.getRectangle().x;
 		y = o.getRectangle().y;
 		w = o.getRectangle().width;
@@ -24,5 +27,7 @@ public class Trigger {
 	
 	public void activate() {
 		if (targetLevel == null && targetSpawn != null) level.gotoSpawn(targetSpawn);
+		if (targetLevel != null) level.gotoLevel(targetLevel, targetSpawn);
+		if (activateTrap && level.trapDuration > 0 && level.trapTimer == -1) level.trapTimer = level.trapDuration;
 	}
 }

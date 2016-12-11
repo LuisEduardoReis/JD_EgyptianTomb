@@ -23,7 +23,7 @@ public class JDGame extends Game {
 		keyBindings.put(Keys.FIRE,Input.Keys.CONTROL_LEFT);
 	}
 	
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 	
 	@Override
 	public void create() {

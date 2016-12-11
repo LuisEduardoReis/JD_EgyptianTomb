@@ -22,6 +22,7 @@
   </object>
   <object id="7" name="test" type="trigger" x="768" y="1152" width="448" height="64">
    <properties>
+    <property name="targetLevel" value="testing_escape"/>
     <property name="targetSpawn" value="default"/>
    </properties>
   </object>

@@ -1,5 +1,7 @@
 package pt.feup.jd;
 
+import java.util.Random;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
@@ -7,6 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Util {
 
+	public static Random random = new Random();
+	
 	public static boolean between(float x, float a, float b) {
 		return x >= a && x <= b;
 	}
@@ -32,5 +36,9 @@ public class Util {
 		float invTexWidth = 1f / region.getTexture().getWidth();
 		float invTexHeight = 1f / region.getTexture().getHeight();
 		region.setRegion((x + .5f) * invTexWidth, (y+.5f) * invTexHeight, (x + width - .5f) * invTexWidth, (y + height - .5f) * invTexHeight);       
+	}
+
+	public static float randomRange(float min, float max) {
+		return min + random.nextFloat()*(max - min);
 	}
 }

@@ -26,24 +26,34 @@ public class Level {
 	GameScreen game;
 	
 	// Logic
+	public String name;
 	public TiledMap map;
 	Tile[] tiles;
 	public int map_width, map_height;
-	public Entity player;
-	ArrayList<Entity> entities;
+	public Player player;
+	public ArrayList<Entity> entities;
 	ArrayList<Entity> newEntities;
 	HashMap<String, Vector2> spawns;
 	HashMap<String, Trigger> triggers;
 	
-	
 	Vector2 cameraPosition;
 	
+	public float trapTimer, trapDuration;
+	
+	// Level switching
+	public boolean persistent;
+	
+	public boolean levelChange;
+	public String targetLevel, targetSpawn;
+	
 	// Render
+	float rumble;
 	OrthogonalTiledMapRenderer tileRenderer;
 
 		
 	public Level(GameScreen game, String name) {
 		this.game = game;
+		this.name = name;
 		map = new TmxMapLoader(new InternalFileHandleResolver()).load("levels/"+name+".tmx");
 		
 		map_width = (Integer) map.getProperties().get("width");
@@ -62,7 +72,12 @@ public class Level {
 		}
 		
 		spawns = new HashMap<String, Vector2>();
-		triggers = new HashMap<String, Trigger>();		
+		triggers = new HashMap<String, Trigger>();
+		
+		levelChange = false;
+		targetLevel = null; targetSpawn = null;	
+		
+		persistent = (map.getProperties().containsKey("persistent"));
 		
 		entities = new ArrayList<Entity>();
 		newEntities = new ArrayList<Entity>();
@@ -70,10 +85,13 @@ public class Level {
 		
 		createMapObjects();
 		
-		player = new Player(this);
-		player.moveTo(spawns.get("default"));
+		trapTimer = -1;
+		trapDuration = 0;
+		if (map.getProperties().containsKey("trapDelay")) 
+			trapDuration = Float.parseFloat((String) map.getProperties().get("trapDelay"));
 		
 		tileRenderer = new OrthogonalTiledMapRenderer(map);
+		rumble = 0;
 	}
 
 	private void createMapObjects() {
@@ -102,12 +120,14 @@ public class Level {
 			}
 		}
 		if (pd == null) spawns.put("default", new Vector2(0,0));
+		else spawns.put("default", pd);
 	}
 
 	
-	public void update(float delta) {
+	public void update(float delta) {		
 		// Preupdate
 		for(Entity e : entities) e.preupdate(delta);
+		rumble = 0;
 		
 		// Update
 		for(Entity e : entities) e.update(delta);
@@ -126,6 +146,13 @@ public class Level {
 			}
 		}}
 		
+		// Misc & Timers
+		if (trapTimer > 0) {
+			trapTimer = Util.stepTo(trapTimer, 0, delta);
+			rumble += 2 + 3*(Math.sin(trapTimer)+1);
+		}
+		if (trapTimer == 0) player.remove = true;
+		
 		// New entities
 		entities.addAll(newEntities);
 		newEntities.clear();
@@ -142,7 +169,7 @@ public class Level {
 		for(Entity e : entities) e.checkLevelCollision(); 
 		
 		// Camera position
-		if (player != null) cameraPosition.set((int) player.x, (int) player.y);
+		if (player != null) cameraPosition.set((int) player.x + Util.randomRange(-rumble, rumble), (int) player.y + Util.randomRange(-rumble, rumble));
 	}
 
 
@@ -165,14 +192,33 @@ public class Level {
 		return (x < 0 || y < 0 || x >= map_width || y >= map_height) ? Tile.SOLID : tiles[y*map_width+x];
 	}
 
+	public void addEntity(Entity e) { newEntities.add(e); }
+	
 	public void gotoSpawn(String targetSpawn) {
-		if (!spawns.containsKey(targetSpawn)) gotoSpawn("default");
+		if (!spawns.containsKey(targetSpawn)) {
+			gotoSpawn("default"); 
+			return;
+		}
 		if (player == null) return;
 		
-		player.moveTo(spawns.get(targetSpawn));
-			
+		Vector2 spawn = spawns.get(targetSpawn);
+		player.moveTo(spawn);
+	}
+
+	public void gotoLevel(String tl, String ts) {
+		if (tl == null) {
+			levelChange = false;
+			targetLevel = null;	targetSpawn = null;
+		} else {
+			levelChange = true;
+			targetLevel = tl; targetSpawn = ts;
+		}
 		
 	}
 
-	public void addEntity(Entity e) { newEntities.add(e); }
+	
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
 }
