@@ -7,6 +7,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,6 +20,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import pt.feup.jd.Assets;
 import pt.feup.jd.JDGame;
+import pt.feup.jd.FadeEffect;
 import pt.feup.jd.Util;
 import pt.feup.jd.entities.Player;
 import pt.feup.jd.levels.Level;
@@ -43,6 +47,10 @@ public class GameScreen extends ScreenAdapter {
 	ShapeRenderer shapeRenderer;
 	
 	public boolean showDoorTooltip;
+	
+	Texture fillTexture;
+	
+	FadeEffect fadeIn, fadeOut;
 
 	
 	@Override
@@ -50,19 +58,35 @@ public class GameScreen extends ScreenAdapter {
 		
 		// Logic
 		levels = new HashMap<String, Level>();
-		gotoLevel("testing", null);	
-		
+					
 		levelChangeTimer = -1;
 		levelChangeDelay = 1f;
-	
+		
+		fadeIn = new FadeEffect();
+		fadeIn.duration = 1.5f;
+		fadeIn.up = false;
+		
+		fadeOut = new FadeEffect();
+		fadeOut.duration = 2f;
+		
+		gotoLevel("testing", null);
+		fadeIn();
+		
 		// Render
 		camera = new OrthographicCamera();
 		viewport = new ScreenViewport(camera);
 		
 		font = new BitmapFont();
 		batch = new SpriteBatch();
-		
+				
 		shapeRenderer = new ShapeRenderer();
+	}
+	
+	public void fadeIn() {		
+		fadeIn.reset();
+		fadeIn.start();
+		
+		fadeOut.reset();		
 	}
 	
 	private void gotoLevel(String name, String spawn) {
@@ -118,16 +142,23 @@ public class GameScreen extends ScreenAdapter {
 				accum -= tickdelay;
 			}
 			
-			if (level.levelChange) levelChangeTimer = levelChangeDelay;
+			if (level.levelChange) {
+				levelChangeTimer = fadeOut.duration;
+				fadeOut.start();
+			}
 			
 		} else {
 			levelChangeTimer = Util.stepTo(levelChangeTimer, 0, delta);
 			if (levelChangeTimer == 0) {
 				levelChangeTimer = -1;
-				gotoLevel(level.targetLevel, level.targetSpawn);				
+				gotoLevel(level.targetLevel, level.targetSpawn);
+				fadeIn();
 			}
 		}	
-	
+		
+		fadeIn.update(delta);
+		fadeOut.update(delta);
+		
 		
 		if (Gdx.input.isKeyJustPressed(Input.Keys.D)) JDGame.DEBUG ^= true;
 		
@@ -180,7 +211,6 @@ public class GameScreen extends ScreenAdapter {
 			
 			// Door Tooltip
 			if (showDoorTooltip) {
-				int t = (int) Math.floor(level.trapTimer);
 				font.getData().setScale(1.5f);
 				layout.setText(font, "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.OPEN_DOOR))+" to open door.");
 				font.draw(batch, layout, (sw - layout.width)/2, sh-32);
@@ -190,6 +220,15 @@ public class GameScreen extends ScreenAdapter {
 			font.draw(batch, "v(" + level.player.vx + "; " + level.player.vy+")",20,20);
 			font.draw(batch, "p(" + level.player.x + "; " + level.player.y+")",20,40);
 			font.draw(batch, levelChangeTimer+"",20,60);
+			
+			// Fade in/out
+			float f = 0;
+			f += fadeIn.getValue();
+			f += fadeOut.getValue();			
+			batch.setColor(0, 0, 0, f);
+			batch.draw(fillTexture,0,0);
+			batch.setColor(1,1,1,1);
+			
 		batch.end();
 	
 	}
@@ -197,6 +236,9 @@ public class GameScreen extends ScreenAdapter {
 	
 	@Override
 	public void resize(int width, int height) {
+		Pixmap p = new Pixmap(width, height, Format.RGB888);
+		p.setColor(1, 1, 1, 1); p.fill();
+		fillTexture = new Texture(p);
 		viewport.update(width, height);
 	}
 }

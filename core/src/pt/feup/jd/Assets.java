@@ -1,11 +1,14 @@
 package pt.feup.jd;
 
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
 
+	public static Texture fillTexture;
+	
 	public static Texture testImage;
 	public static Texture spritesheet;
 	public static TextureRegion[][] sprites64, sprites32;

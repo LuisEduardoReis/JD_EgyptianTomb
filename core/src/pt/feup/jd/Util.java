@@ -41,4 +41,8 @@ public class Util {
 	public static float randomRange(float min, float max) {
 		return min + random.nextFloat()*(max - min);
 	}
+
+	public static float clamp(float x, int a, int b) {
+		return Math.max(a,Math.min(x, b));
+	}
 }
