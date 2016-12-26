@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import pt.feup.jd.Assets;
 import pt.feup.jd.JDGame;
+import pt.feup.jd.Util;
 import pt.feup.jd.entities.Player;
 import pt.feup.jd.levels.Level;
 
@@ -30,6 +31,8 @@ public class GameScreen extends ScreenAdapter {
 	Level level;
 	HashMap<String, Level> levels;
 	
+	float levelChangeTimer, levelChangeDelay;
+	
 	// Render
 	OrthographicCamera camera;
 	Viewport viewport;
@@ -38,6 +41,8 @@ public class GameScreen extends ScreenAdapter {
 	SpriteBatch batch;
 	
 	ShapeRenderer shapeRenderer;
+	
+	public boolean showDoorTooltip;
 
 	
 	@Override
@@ -46,6 +51,9 @@ public class GameScreen extends ScreenAdapter {
 		// Logic
 		levels = new HashMap<String, Level>();
 		gotoLevel("testing", null);	
+		
+		levelChangeTimer = -1;
+		levelChangeDelay = 1f;
 	
 		// Render
 		camera = new OrthographicCamera();
@@ -59,18 +67,22 @@ public class GameScreen extends ScreenAdapter {
 	
 	private void gotoLevel(String name, String spawn) {
 		Player player = null;
-		// TODO if player goes to same level
 		
 		if (level != null) {
+			level.gotoLevel(null, null);
+			
+			if (level.name.equals(name)) {
+				level.gotoSpawn(spawn);
+				return;
+			}
+			
 			player = level.player;
 			level.entities.remove(player);
 			
 			if (!level.persistent) {
 				levels.remove(level.name);
 				level.destroy();	
-			}
-			
-			level.gotoLevel(null, null);
+			}			
 		}
 			
 		if (levels.containsKey(name))
@@ -97,15 +109,29 @@ public class GameScreen extends ScreenAdapter {
 		accum += delta;
 
 		// Logic
-		while(accum > tickdelay) {
-			level.update(tickdelay);
-			accum -= tickdelay;
-		}
+		showDoorTooltip = false;
+		
+		if (levelChangeTimer < 0) {
+		
+			while(accum > tickdelay) {
+				level.update(tickdelay);
+				accum -= tickdelay;
+			}
+			
+			if (level.levelChange) levelChangeTimer = levelChangeDelay;
+			
+		} else {
+			levelChangeTimer = Util.stepTo(levelChangeTimer, 0, delta);
+			if (levelChangeTimer == 0) {
+				levelChangeTimer = -1;
+				gotoLevel(level.targetLevel, level.targetSpawn);				
+			}
+		}	
+	
 		
 		if (Gdx.input.isKeyJustPressed(Input.Keys.D)) JDGame.DEBUG ^= true;
 		
-		// Level change
-		if (level.levelChange) gotoLevel(level.targetLevel, level.targetSpawn);		
+				
 		
 		// Render
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -152,10 +178,18 @@ public class GameScreen extends ScreenAdapter {
 				font.draw(batch, layout, (sw - layout.width)/2, sh-32);
 			} 
 			
+			// Door Tooltip
+			if (showDoorTooltip) {
+				int t = (int) Math.floor(level.trapTimer);
+				font.getData().setScale(1.5f);
+				layout.setText(font, "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.OPEN_DOOR))+" to open door.");
+				font.draw(batch, layout, (sw - layout.width)/2, sh-32);
+			}
 			// Aux
 			font.getData().setScale(1f);
 			font.draw(batch, "v(" + level.player.vx + "; " + level.player.vy+")",20,20);
 			font.draw(batch, "p(" + level.player.x + "; " + level.player.y+")",20,40);
+			font.draw(batch, levelChangeTimer+"",20,60);
 		batch.end();
 	
 	}

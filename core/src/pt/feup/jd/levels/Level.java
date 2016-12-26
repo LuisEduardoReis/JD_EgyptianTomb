@@ -111,7 +111,14 @@ public class Level {
 				else if (type.equals("trigger")) {
 					Trigger trigger = new Trigger(this, (RectangleMapObject) o);
 					triggers.put(trigger.name, trigger);
-				} 
+				}
+				// Doors
+				else if (type.equals("door")) {
+					Door door = new Door(this, (RectangleMapObject) o);
+					spawns.put(door.name, p);
+					if (pd == null) pd = p;
+					triggers.put(door.name, door);
+				}
 				// Enemies
 				else if (type.startsWith("enemy-")) {
 					// Snake
@@ -121,6 +128,7 @@ public class Level {
 		}
 		if (pd == null) spawns.put("default", new Vector2(0,0));
 		else spawns.put("default", pd);
+		
 	}
 
 	
@@ -195,14 +203,13 @@ public class Level {
 	public void addEntity(Entity e) { newEntities.add(e); }
 	
 	public void gotoSpawn(String targetSpawn) {
+		if (player == null) return;
 		if (!spawns.containsKey(targetSpawn)) {
 			gotoSpawn("default"); 
 			return;
-		}
-		if (player == null) return;
+		}	
 		
-		Vector2 spawn = spawns.get(targetSpawn);
-		player.moveTo(spawn);
+		player.moveTo(spawns.get(targetSpawn));
 	}
 
 	public void gotoLevel(String tl, String ts) {

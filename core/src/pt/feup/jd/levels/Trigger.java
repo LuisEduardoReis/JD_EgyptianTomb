@@ -22,12 +22,10 @@ public class Trigger {
 		x = o.getRectangle().x;
 		y = o.getRectangle().y;
 		w = o.getRectangle().width;
-		h = o.getRectangle().height;		
+		h = o.getRectangle().height;
 	}
 	
 	public void activate() {
-		if (targetLevel == null && targetSpawn != null) level.gotoSpawn(targetSpawn);
-		if (targetLevel != null) level.gotoLevel(targetLevel, targetSpawn);
 		if (activateTrap && level.trapDuration > 0 && level.trapTimer == -1) level.trapTimer = level.trapDuration;
 	}
 }

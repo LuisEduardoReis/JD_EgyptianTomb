@@ -14,7 +14,6 @@ public class Assets {
 		
 		int l = JDGame.TILE_SIZE;
 		
-		testImage = new Texture("badlogic.jpg");
 		spritesheet = new Texture("spritesheet.png");
 		spritesheet.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		sprites64 = TextureRegion.split(spritesheet, l, l);
