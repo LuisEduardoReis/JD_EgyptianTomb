@@ -145,6 +145,9 @@ public class Entity {
 		renderer.rect((int)(x-hx/2),(int)(y-hy/2),hx,hy);
 	}
 	
+	public void renderLight(SpriteBatch batch) {
+	}
+
 	public static Vector2 v1 = new Vector2(), v2 = new Vector2();
 	public void checkLevelCollision() {
 		if (!colideWithLevel) return;
@@ -236,4 +239,5 @@ public class Entity {
 		efy += y;		
 	}
 
+	
 }

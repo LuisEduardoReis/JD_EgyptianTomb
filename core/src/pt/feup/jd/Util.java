@@ -2,6 +2,7 @@ package pt.feup.jd;
 
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
@@ -44,5 +45,13 @@ public class Util {
 
 	public static float clamp(float x, int a, int b) {
 		return Math.max(a,Math.min(x, b));
+	}
+	
+	public static void drawLight(Batch batch, float x, float y, float w, float h, float r, float g, float b, float a) {
+		w *= JDGame.TILE_SIZE;
+		h *= JDGame.TILE_SIZE;
+		batch.setColor(r,g,b,a);
+		batch.draw(Assets.light, x - w/2, y - h/2, w,h);
+		batch.setColor(1, 1, 1, 1);
 	}
 }

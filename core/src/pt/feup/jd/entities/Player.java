@@ -1,6 +1,7 @@
 package pt.feup.jd.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import pt.feup.jd.Assets;
 import pt.feup.jd.JDGame;
@@ -94,9 +95,6 @@ public class Player extends Entity {
 		}
 		
 		
-		
-		
-		
 		// Weapon
 		gun_timer = Util.stepTo(gun_timer, 0, delta);
 		if (gun_timer == 0 && Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.FIRE))) {
@@ -106,6 +104,12 @@ public class Player extends Entity {
 			
 			gun_timer = gun_delay;
 		}
+		
+	}
+	
+	@Override
+	public void renderLight(SpriteBatch batch) {		
+		Util.drawLight(batch, x, y, 7f, 7f, 1, 1, 0.75f, 1);
 	}
 	
 

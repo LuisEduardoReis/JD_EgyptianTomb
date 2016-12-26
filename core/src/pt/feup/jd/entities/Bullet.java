@@ -1,7 +1,10 @@
 package pt.feup.jd.entities;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import pt.feup.jd.Assets;
 import pt.feup.jd.Sprite;
+import pt.feup.jd.Util;
 import pt.feup.jd.levels.Level;
 
 public class Bullet extends Entity {
@@ -38,4 +41,8 @@ public class Bullet extends Entity {
 		remove = true;
 	}
 
+	@Override
+	public void renderLight(SpriteBatch batch) {		
+		Util.drawLight(batch, x, y, 2f, 2f, 1, 1, 0.75f, 0.25f);
+	}
 }

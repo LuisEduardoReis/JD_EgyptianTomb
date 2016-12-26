@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
@@ -23,7 +22,7 @@ import pt.feup.jd.entities.Snake;
 import pt.feup.jd.screens.GameScreen;
 
 public class Level {
-	GameScreen game;
+	public GameScreen game;
 	
 	// Logic
 	public String name;
@@ -48,7 +47,7 @@ public class Level {
 	
 	// Render
 	float rumble;
-	OrthogonalTiledMapRenderer tileRenderer;
+	public OrthogonalTiledMapRenderer tileRenderer;
 
 		
 	public Level(GameScreen game, String name) {
@@ -90,7 +89,7 @@ public class Level {
 		if (map.getProperties().containsKey("trapDelay")) 
 			trapDuration = Float.parseFloat((String) map.getProperties().get("trapDelay"));
 		
-		tileRenderer = new OrthogonalTiledMapRenderer(map);
+		tileRenderer = new OrthogonalTiledMapRenderer(map, game.batch);
 		rumble = 0;
 	}
 
@@ -184,12 +183,7 @@ public class Level {
 	public void renderEntities(SpriteBatch batch) {
 		for(Entity e : entities) e.render(batch);
 	}
-	
-	public void renderTiles(OrthographicCamera camera) {
-		tileRenderer.setView(camera);
-		tileRenderer.render();
-	}
-	
+		
 	public void renderDebug(ShapeRenderer shapeRenderer) {
 		for(Entity e : entities) e.renderDebug(shapeRenderer);
 	}
@@ -197,7 +191,7 @@ public class Level {
 	public Vector2 getCameraPosition() { return cameraPosition; }
 
 	public Tile getTile(int x, int y) {
-		return (x < 0 || y < 0 || x >= map_width || y >= map_height) ? Tile.SOLID : tiles[y*map_width+x];
+		return (x < 0 || y < 0 || x >= map_width || y >= map_height) ? Tile.AIR : tiles[y*map_width+x];
 	}
 
 	public void addEntity(Entity e) { newEntities.add(e); }
@@ -227,5 +221,9 @@ public class Level {
 	public void destroy() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void renderLight(SpriteBatch batch) {
+		for(Entity e : entities) e.renderLight(batch);		
 	}
 }

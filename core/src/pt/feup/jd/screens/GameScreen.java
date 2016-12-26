@@ -13,14 +13,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import pt.feup.jd.Assets;
-import pt.feup.jd.JDGame;
 import pt.feup.jd.FadeEffect;
+import pt.feup.jd.JDGame;
 import pt.feup.jd.Util;
 import pt.feup.jd.entities.Player;
 import pt.feup.jd.levels.Level;
@@ -39,16 +41,21 @@ public class GameScreen extends ScreenAdapter {
 	
 	// Render
 	OrthographicCamera camera;
-	Viewport viewport;
+	public Viewport viewport;
 	
 	BitmapFont font;
-	SpriteBatch batch;
+	public SpriteBatch batch;
 	
 	ShapeRenderer shapeRenderer;
 	
 	public boolean showDoorTooltip;
 	
 	Texture fillTexture;
+	
+	ShaderProgram defaultShader;
+	ShaderProgram shader;
+	
+	FrameBuffer fbo;
 	
 	FadeEffect fadeIn, fadeOut;
 
@@ -69,8 +76,6 @@ public class GameScreen extends ScreenAdapter {
 		fadeOut = new FadeEffect();
 		fadeOut.duration = 2f;
 		
-		gotoLevel("testing", null);
-		fadeIn();
 		
 		// Render
 		camera = new OrthographicCamera();
@@ -80,6 +85,15 @@ public class GameScreen extends ScreenAdapter {
 		batch = new SpriteBatch();
 				
 		shapeRenderer = new ShapeRenderer();
+		
+		ShaderProgram.pedantic = false;
+		defaultShader = new ShaderProgram(Assets.vertexShader, Assets.defaultFragmentShader);
+		shader = new ShaderProgram(Assets.vertexShader, Assets.fragmentShader);
+		
+				
+		// Start
+		gotoLevel("testing", null);
+		fadeIn();
 	}
 	
 	public void fadeIn() {		
@@ -132,6 +146,103 @@ public class GameScreen extends ScreenAdapter {
 	public void render(float delta) {
 		accum += delta;
 
+		logic(delta);
+				
+		// Render
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		
+		viewport.apply();
+		
+		camera.position.set(level.getCameraPosition(),0);
+		camera.update();
+		
+		shader.begin();
+		shader.setUniformi("u_lightmap", 1);
+		shader.setUniformf("ambientColor", 1, 1, 1, 0.1f);
+		shader.end();
+		
+		batch.setProjectionMatrix(camera.combined);
+		
+		// Lighting
+		fbo.begin();
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		batch.setShader(defaultShader);
+		batch.begin(); 
+			level.renderLight(batch);
+		batch.end();		
+		fbo.end();
+		
+		// Lighted entities
+			fbo.getColorBufferTexture().bind(1);
+			Assets.light.bind(0);
+			batch.setShader(shader);
+			
+			// Tiles		
+			level.tileRenderer.setView(camera);
+			level.tileRenderer.render();
+			
+			// Entities
+			batch.begin(); 
+				level.renderEntities(batch);
+			batch.end();
+		
+		
+		//Debug
+		if (JDGame.DEBUG) {
+			shapeRenderer.setProjectionMatrix(camera.combined);
+			shapeRenderer.begin(ShapeType.Line);
+				level.renderDebug(shapeRenderer);
+			shapeRenderer.end();
+		}
+		
+		// HUD
+		int sw = viewport.getScreenWidth(), sh = viewport.getScreenHeight();
+		camera.position.set(sw/2,sh/2,0);
+		camera.update();
+		batch.setProjectionMatrix(camera.combined);
+		batch.setShader(defaultShader);
+		batch.begin();
+			// Health
+			float health = level.player.health;
+			for(int i = 0; i < health/10; i++) batch.draw(Assets.sprites32[4][1], 16*i, sh-32);
+			
+			// Timer
+			if (level.trapTimer != -1) {
+				int t = (int) Math.floor(level.trapTimer);
+				String timerText = String.format("%d:%02d", t / 60, t % 60);
+				font.getData().setScale(3f);
+				layout.setText(font, timerText);
+				font.draw(batch, layout, (sw - layout.width)/2, sh-32);
+			} 
+			
+			// Door Tooltip
+			if (showDoorTooltip) {
+				font.getData().setScale(1.5f);
+				layout.setText(font, "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.OPEN_DOOR))+" to open door.");
+				font.draw(batch, layout, (sw - layout.width)/2, sh-32);
+			}
+			// Aux
+			if (JDGame.DEBUG) {
+				font.getData().setScale(1f);
+				font.draw(batch, "v(" + level.player.vx + "; " + level.player.vy+")",20,20);
+				font.draw(batch, "p(" + level.player.x + "; " + level.player.y+")",20,40);
+				font.draw(batch, levelChangeTimer+"",20,60);
+			}
+			// Fade in/out
+			float f = 0;
+			f += fadeIn.getValue();
+			f += fadeOut.getValue();			
+			batch.setColor(0, 0, 0, f);
+			batch.draw(fillTexture,0,0);
+			batch.setColor(1,1,1,1);
+			
+		batch.end();
+	
+	}
+
+	private void logic(float delta) {
 		// Logic
 		showDoorTooltip = false;
 		
@@ -161,84 +272,25 @@ public class GameScreen extends ScreenAdapter {
 		
 		
 		if (Gdx.input.isKeyJustPressed(Input.Keys.D)) JDGame.DEBUG ^= true;
-		
-				
-		
-		// Render
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		
-		viewport.apply();
-		
-		camera.position.set(level.getCameraPosition(),0);
-		camera.update();	
-		
-		// Tiles
-		level.renderTiles(camera);
-		
-		// Entities
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin(); 
-			level.renderEntities(batch);
-		batch.end();
-		
-		//Debug
-		if (JDGame.DEBUG) {
-			shapeRenderer.setProjectionMatrix(camera.combined);
-			shapeRenderer.begin(ShapeType.Line);
-				level.renderDebug(shapeRenderer);
-			shapeRenderer.end();
-		}
-		
-		// HUD
-		int sw = viewport.getScreenWidth(), sh = viewport.getScreenHeight();
-		camera.position.set(sw/2,sh/2,0);
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-			// Health
-			float health = level.player.health;
-			for(int i = 0; i < health/10; i++) batch.draw(Assets.sprites32[4][1], 16*i, sh-32);
-			
-			// Timer
-			if (level.trapTimer != -1) {
-				int t = (int) Math.floor(level.trapTimer);
-				String timerText = String.format("%d:%02d", t / 60, t % 60);
-				font.getData().setScale(3f);
-				layout.setText(font, timerText);
-				font.draw(batch, layout, (sw - layout.width)/2, sh-32);
-			} 
-			
-			// Door Tooltip
-			if (showDoorTooltip) {
-				font.getData().setScale(1.5f);
-				layout.setText(font, "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.OPEN_DOOR))+" to open door.");
-				font.draw(batch, layout, (sw - layout.width)/2, sh-32);
-			}
-			// Aux
-			font.getData().setScale(1f);
-			font.draw(batch, "v(" + level.player.vx + "; " + level.player.vy+")",20,20);
-			font.draw(batch, "p(" + level.player.x + "; " + level.player.y+")",20,40);
-			font.draw(batch, levelChangeTimer+"",20,60);
-			
-			// Fade in/out
-			float f = 0;
-			f += fadeIn.getValue();
-			f += fadeOut.getValue();			
-			batch.setColor(0, 0, 0, f);
-			batch.draw(fillTexture,0,0);
-			batch.setColor(1,1,1,1);
-			
-		batch.end();
-	
 	}
 	
 	
 	@Override
 	public void resize(int width, int height) {
+		if (fillTexture != null) fillTexture.dispose();
+		
 		Pixmap p = new Pixmap(width, height, Format.RGB888);
 		p.setColor(1, 1, 1, 1); p.fill();
 		fillTexture = new Texture(p);
+		p.dispose();
+
+		if (fbo != null) fbo.dispose();
+		fbo = new FrameBuffer(Format.RGBA8888, width, height, false);
+	
+		shader.begin();
+		shader.setUniformf("resolution", width, height);
+		shader.end();
+		
 		viewport.update(width, height);
 	}
 }

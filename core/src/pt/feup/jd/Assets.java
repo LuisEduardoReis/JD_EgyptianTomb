@@ -1,6 +1,7 @@
 package pt.feup.jd;
 
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,9 +10,13 @@ public class Assets {
 
 	public static Texture fillTexture;
 	
-	public static Texture testImage;
 	public static Texture spritesheet;
 	public static TextureRegion[][] sprites64, sprites32;
+	public static Texture light;
+	
+	public static String vertexShader;
+	public static String fragmentShader;
+	public static String defaultFragmentShader;
 	
 	public static void createAssets() {
 		
@@ -29,5 +34,13 @@ public class Assets {
 			for(int j = 0; j < sprites32[i].length; j++) 
 				Util.fixBleeding(sprites32[i][j]);
 		
+		light = new Texture("light.png");
+		
+		vertexShader = new FileHandle("shaders/vertexShader.glsl").readString();
+		defaultFragmentShader = new FileHandle("shaders/defaultFragmentShader.glsl").readString();
+		fragmentShader =  new FileHandle("shaders/fragmentShader.glsl").readString();
+		
 	}
+
+
 }
