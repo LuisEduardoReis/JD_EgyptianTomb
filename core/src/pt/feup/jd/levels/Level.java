@@ -65,8 +65,10 @@ public class Level {
 		for(int yy = 0; yy<map_height; yy++) {
 			for(int xx = 0; xx<map_width; xx++) {
 				TiledMapTileLayer.Cell cell = tiled_tiles.getCell(xx, yy);
-				if (cell != null)
-					tiles[yy*map_width+xx] = Tile.valueOf((String) cell.getTile().getProperties().get("type"));
+				if (cell != null) {
+					String cellType = (String) cell.getTile().getProperties().get("type");
+					tiles[yy*map_width+xx] = (cellType == null) ? Tile.AIR : Tile.valueOf(cellType);
+				}
 			}
 		}
 		
