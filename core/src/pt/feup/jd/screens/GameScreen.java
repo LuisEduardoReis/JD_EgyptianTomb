@@ -49,6 +49,7 @@ public class GameScreen extends ScreenAdapter {
 	ShapeRenderer shapeRenderer;
 	
 	public boolean showDoorTooltip;
+	public boolean showLeverTooltip;
 	
 	Texture fillTexture;
 	

@@ -34,6 +34,7 @@ public class Level {
 	ArrayList<Entity> newEntities;
 	HashMap<String, Vector2> spawns;
 	HashMap<String, Trigger> triggers;
+	HashMap<String, TileEntity> tileEntities;
 	
 	Vector2 cameraPosition;
 	
@@ -48,6 +49,7 @@ public class Level {
 	// Render
 	float rumble;
 	public OrthogonalTiledMapRenderer tileRenderer;
+
 
 		
 	public Level(GameScreen game, String name) {
@@ -81,6 +83,7 @@ public class Level {
 		persistent = (map.getProperties().containsKey("persistent"));
 		
 		entities = new ArrayList<Entity>();
+		tileEntities = new HashMap<String, TileEntity>();
 		newEntities = new ArrayList<Entity>();
 		cameraPosition = new Vector2().set(0, 0);
 		
@@ -110,7 +113,7 @@ public class Level {
 				}
 				// Triggers
 				else if (type.equals("trigger")) {
-					Trigger trigger = new Trigger(this, (RectangleMapObject) o);
+					TriggerAdapter trigger = new TriggerAdapter(this, (RectangleMapObject) o);
 					triggers.put(trigger.name, trigger);
 				}
 				// Doors
@@ -119,6 +122,20 @@ public class Level {
 					spawns.put(door.name, p);
 					if (pd == null) pd = p;
 					triggers.put(door.name, door);
+				}
+				// Gates
+				else if (type.equals("gate")) {
+					Gate gate = new Gate(this, o.getName(), p.x,p.y);
+					if (o.getProperties().containsKey("lever")) 
+						gate.lever = (String) o.getProperties().get("lever");
+					gate.inverted = o.getProperties().containsKey("inverted");
+					tileEntities.put(gate.name, gate);
+				}
+				// Lever
+				else if (type.equals("lever")) {
+					Lever lever = new Lever(this, o.getName(), p.x,p.y);
+					tileEntities.put(lever.name, lever);
+					triggers.put(lever.name, lever);
 				}
 				// Enemies
 				else if (type.startsWith("enemy-")) {
@@ -139,12 +156,13 @@ public class Level {
 		rumble = 0;
 		
 		// Update
+		for(TileEntity e : tileEntities.values()) e.update(delta);
 		for(Entity e : entities) e.update(delta);
 		
 		// Triggers
 		if (player != null) { for(Trigger t : triggers.values()) {
-			if (Collision.aabbToaabb(player.x, player.y, player.hx, player.hy, t.x, t.y, t.w, t.h))
-				t.activate();
+			if (Collision.aabbToaabb(player.x, player.y, player.hx, player.hy, t.getX(), t.getY(), t.getW(), t.getH()))
+				t.collide();
 		}}
 		
 		// Entity collisions
@@ -183,6 +201,7 @@ public class Level {
 
 
 	public void renderEntities(SpriteBatch batch) {
+		for(TileEntity e : tileEntities.values()) e.render(batch);
 		for(Entity e : entities) e.render(batch);
 	}
 		
@@ -194,6 +213,9 @@ public class Level {
 
 	public Tile getTile(int x, int y) {
 		return (x < 0 || y < 0 || x >= map_width || y >= map_height) ? Tile.AIR : tiles[y*map_width+x];
+	}
+	public void setTile(int x, int y, Tile tile) {
+		if (x >= 0 && y >= 0 && x < map_width && y < map_height) tiles[y*map_width+x] = tile;	
 	}
 
 	public void addEntity(Entity e) { newEntities.add(e); }
@@ -228,4 +250,6 @@ public class Level {
 	public void renderLight(SpriteBatch batch) {
 		for(Entity e : entities) e.renderLight(batch);		
 	}
+
+
 }

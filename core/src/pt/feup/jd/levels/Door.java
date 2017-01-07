@@ -5,14 +5,14 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 
 import pt.feup.jd.JDGame;
 
-public class Door extends Trigger {
+public class Door extends TriggerAdapter {
 
 	public Door(Level level, RectangleMapObject o) {
 		super(level, o);
 	}
 
 	@Override
-	public void activate() {
+	public void collide() {
 		if (targetLevel != null || targetSpawn != null)
 			level.game.showDoorTooltip = true;
 		
