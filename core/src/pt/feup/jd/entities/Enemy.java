@@ -2,6 +2,7 @@ package pt.feup.jd.entities;
 
 import pt.feup.jd.Util;
 import pt.feup.jd.levels.Level;
+import pt.feup.jd.levels.Tile;
 
 public class Enemy extends Entity{
 	
@@ -63,8 +64,8 @@ public class Enemy extends Entity{
 	}
 	
 	@Override
-	public void levelCollision(float nx, float ny) {
-		super.levelCollision(nx, ny);
+	public void levelCollision(float nx, float ny, Tile t) {
+		super.levelCollision(nx, ny, t);
 		
 		if (nx != 0 && turnOnBump) { 
 			direction = -direction; 

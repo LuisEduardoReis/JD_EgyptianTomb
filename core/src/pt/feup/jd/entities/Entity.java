@@ -10,6 +10,7 @@ import pt.feup.jd.Sprite;
 import pt.feup.jd.Util;
 import pt.feup.jd.levels.Collision;
 import pt.feup.jd.levels.Level;
+import pt.feup.jd.levels.Tile;
 
 public class Entity {
 	
@@ -157,10 +158,12 @@ public class Entity {
 			int minYi = (int) Math.floor((Math.min(y, py)-hy/2)/ts), maxYi = (int)Math.floor((Math.max(y, py)+hy/2)/ts);
 			
 			float r = 1; Vector2 n = v1.set(0, 0);
+			Tile rt = Tile.AIR;
 	
 			for(int yi = minYi; yi <= maxYi; yi++) {
 			for(int xi = minXi; xi <= maxXi; xi++) {
-				if (!level.getTile(xi, yi).solid) continue;
+				Tile t = level.getTile(xi, yi);
+				if (!t.solid) continue;
 				
 				float nr = Collision.sweepAABB(
 						px-hx/2, py-hy/2, hx, hy, 
@@ -169,6 +172,7 @@ public class Entity {
 				if (nr < r) {
 					r = nr;
 					n.set(v2);
+					rt = t;
 				}
 			}}
 			
@@ -178,7 +182,7 @@ public class Entity {
 			
 			if (r == 1) break;
 			else {
-				levelCollision(n.x,n.y);
+				levelCollision(n.x,n.y,rt);
 				if (n.x != 0) vx = -bounciness*vx;
 				if (n.y != 0) vy = -bounciness*vy;
 			}
@@ -197,7 +201,8 @@ public class Entity {
 		
 	}
 	
-	public void levelCollision(float nx, float ny) {		
+	public void levelCollision(float nx, float ny, Tile t) {		
+		if (t == Tile.SPIKE) damage(health);
 	}
 
 	public void entityCollision(Entity other) {

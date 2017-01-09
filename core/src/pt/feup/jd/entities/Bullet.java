@@ -6,6 +6,7 @@ import pt.feup.jd.Assets;
 import pt.feup.jd.Sprite;
 import pt.feup.jd.Util;
 import pt.feup.jd.levels.Level;
+import pt.feup.jd.levels.Tile;
 
 public class Bullet extends Entity {
 
@@ -36,8 +37,8 @@ public class Bullet extends Entity {
 	}
 	
 	@Override
-	public void levelCollision(float x, float y) {
-		super.levelCollision(x, y);
+	public void levelCollision(float x, float y, Tile t) {
+		super.levelCollision(x, y, t);
 		
 		remove = true;
 	}
