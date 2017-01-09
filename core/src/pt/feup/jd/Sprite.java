@@ -26,21 +26,21 @@ public class Sprite {
 	
 	static Affine2 t = new Affine2();
 	static Color color = new Color();
-	public void render(SpriteBatch batch,int anim_index, float x, float y, float scaleX, float scaleY, Color color) {
-		
-		int ts = JDGame.TILE_SIZE;
+	public void render(SpriteBatch batch,int anim_index, float x, float y, float scaleX, float scaleY, float rotation, Color color) {
 		
 		TextureRegion s = frames.get(anim_index);
+		int w = s.getRegionWidth(), h = s.getRegionHeight();
 		
 		t.idt();
 		t.translate((int) x, (int) y);
 		t.scale(scaleX, scaleY);
-		t.translate(-ts/2, -ts/2);
+		t.rotate(rotation);
+		t.translate(-w/2, -h/2);
 	
 		
 		color.set(color);
 		batch.setColor(color);
-		batch.draw(s, ts, ts, t);
+		batch.draw(s, w, h, t);
 		batch.setColor(Color.WHITE);
 	}
 }

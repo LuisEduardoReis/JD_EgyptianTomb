@@ -13,7 +13,8 @@ import pt.feup.jd.levels.Tile;
 public class Player extends Entity {
 	
 	public static final float MOVE_SPEED = 5*JDGame.TILE_SIZE;
-	public static final float JUMP_SPEED = (float) Math.sqrt(2*Entity.GRAVITY*2.5*JDGame.TILE_SIZE); 
+	public static final float JUMP_SPEED = (float) Math.sqrt(2*Entity.GRAVITY*2.5*JDGame.TILE_SIZE);
+	public static final float LADDER_SPEED = 4*JDGame.TILE_SIZE;
 	
 	static Sprite idle_anim;
 	static Sprite walk_anim;
@@ -106,10 +107,10 @@ public class Player extends Entity {
 		
 		if (onLadder) {
 			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) {
-				vy = 2*JDGame.TILE_SIZE;
+				vy = LADDER_SPEED;
 			} else
 			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.DOWN))) {
-				vy = -2*JDGame.TILE_SIZE;
+				vy = -LADDER_SPEED;
 			} else {
 				vy = 0;
 			}

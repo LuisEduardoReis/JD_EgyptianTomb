@@ -44,9 +44,9 @@ public class Lever extends TileEntity implements Trigger {
 	}
 
 	@Override
-	public float getX() { return x; }
+	public float getX() { return x - JDGame.TILE_SIZE/2; }
 	@Override
-	public float getY() { return y; }
+	public float getY() { return y - JDGame.TILE_SIZE/2; }
 	@Override
 	public float getW() { return JDGame.TILE_SIZE; }
 	@Override

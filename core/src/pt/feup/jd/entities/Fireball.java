@@ -36,11 +36,12 @@ public class Fireball extends Entity {
 		damage = 25f;
 	}
 
-	@Override
-	public void update(float delta) {
-		super.update(delta);
 		
-		if (vx == 0 && vy == 0) remove = true;
+	@Override
+	public void levelCollision(float nx, float ny) {
+		super.levelCollision(nx, ny);
+		
+		remove = true;
 	}
 	
 	@Override

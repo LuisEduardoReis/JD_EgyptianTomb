@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+import pt.feup.jd.JDGame;
 import pt.feup.jd.Util;
 import pt.feup.jd.entities.Entity;
 import pt.feup.jd.entities.Player;
@@ -63,15 +65,18 @@ public class Level {
 		
 		for(int i = 0; i < tiles.length; i++) tiles[i] = Tile.AIR;
 		
-		TiledMapTileLayer tiled_tiles = (TiledMapTileLayer) map.getLayers().get("solid"); 
+		TiledMapTileLayer tiled_tiles = (TiledMapTileLayer) map.getLayers().get("main"); 
 		for(int yy = 0; yy<map_height; yy++) {
 			for(int xx = 0; xx<map_width; xx++) {
 				TiledMapTileLayer.Cell cell = tiled_tiles.getCell(xx, yy);
+				/*System.out.print("\t"+((cell == null) ? " " : 
+					"("+((cell.getTile().getId()-1) % 16)+", "+(cell.getTile().getId()-1)/16+")" 
+						));*/
 				if (cell != null) {
-					String cellType = (String) cell.getTile().getProperties().get("type");
-					tiles[yy*map_width+xx] = (cellType == null) ? Tile.AIR : Tile.valueOf(cellType);
+					tiles[yy*map_width+xx] = Tile.TILESET[cell.getTile().getId()-1];
 				}
 			}
+			//System.out.println();	System.out.println();
 		}
 		
 		spawns = new HashMap<String, Vector2>();
@@ -140,9 +145,9 @@ public class Level {
 				// Fireball Trap
 				else if (type.equals("fireballtrap")) {
 					FireballTrap trap = new FireballTrap(this, o.getName(), p.x, p.y);
-					if (o.getProperties().containsKey("rotation")) trap.rotation =  ((Float) o.getProperties().get("rotation"));
-					if (o.getProperties().containsKey("delay")) trap.fireDelay =  ((Float) o.getProperties().get("delay"));
-					if (o.getProperties().containsKey("speed")) trap.fireSpeed =  ((Float) o.getProperties().get("speed"));
+					if (o.getProperties().containsKey("rotation")) trap.rotation =  Float.parseFloat((String) o.getProperties().get("rotation"));
+					if (o.getProperties().containsKey("delay")) trap.fireDelay =  Float.parseFloat((String) o.getProperties().get("delay"));
+					if (o.getProperties().containsKey("speed")) trap.fireSpeed =  Float.parseFloat((String) o.getProperties().get("speed"));
 					if (o.getProperties().containsKey("trigger")) trap.trigger =  ((String) o.getProperties().get("trigger"));
 					tileEntities.put(trap.name, trap);
 				}
@@ -219,6 +224,20 @@ public class Level {
 		
 	public void renderDebug(ShapeRenderer shapeRenderer) {
 		for(Entity e : entities) e.renderDebug(shapeRenderer);
+		
+		shapeRenderer.setColor(Color.RED);
+		for(int yy = 0; yy<map_height; yy++) {
+			for(int xx = 0; xx<map_width; xx++) {
+				if (!tiles[yy*map_width+xx].solid) continue;
+				
+				shapeRenderer.rect(xx*JDGame.TILE_SIZE, yy*JDGame.TILE_SIZE,JDGame.TILE_SIZE,JDGame.TILE_SIZE);
+			}
+		}
+		
+		shapeRenderer.setColor(Color.BLUE);
+		for(Trigger t : triggers.values()) {
+			shapeRenderer.rect(t.getX(), t.getY(), t.getW(), t.getH());
+		}
 	}
 
 	public Vector2 getCameraPosition() { return cameraPosition; }

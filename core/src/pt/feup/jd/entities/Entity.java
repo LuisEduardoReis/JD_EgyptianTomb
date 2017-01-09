@@ -23,8 +23,6 @@ public class Entity {
 	public float vx, vy;
 	public int direction;
 	
-	public float efx, efy, eff;
-	
 	public boolean colideWithLevel;
 	public float bounciness;
 	public boolean applyGravity;
@@ -33,6 +31,7 @@ public class Entity {
 	public Sprite sprite;
 	public float anim_timer, anim_speed; 
 	public int anim_index;
+	public float rotation;
 	
 	
 	public float health;
@@ -40,6 +39,8 @@ public class Entity {
 	public boolean dead;
 	
 	public boolean remove = true;
+
+	
 	
 	public Entity(Level level) {
 		this.level = level;
@@ -65,9 +66,7 @@ public class Entity {
 		damage_anim_delay = 1;
 		remove = false;
 		
-		efx = 0;
-		efy = 0;
-		eff = 0.95f;
+		rotation = 0;
 	}
 	
 	public void preupdate(float delta) {
@@ -96,9 +95,6 @@ public class Entity {
 			}
 		}
 		
-		// External force
-		efx *= eff;
-		efy *= eff;
 	}
 	
 	public void damage(float damage) {
@@ -112,8 +108,8 @@ public class Entity {
 	}
 
 	public void postupdate(float delta) {
-		x += (vx+efx)*delta;
-		y += (vy+efy)*delta;
+		x += vx*delta;
+		y += vy*delta;
 		
 		if(sprite != null) anim_index %= sprite.frames.size();
 	}
@@ -136,7 +132,7 @@ public class Entity {
 				float s = damage_anim_timer / damage_anim_delay;
 				color.set(1,1-s,1-s,1);
 			}
-			sprite.render(batch,anim_index, x,y, direction, 1, color);
+			sprite.render(batch,anim_index, x,y, direction, 1, rotation, color);
 		}
 	}
 	
@@ -232,11 +228,6 @@ public class Entity {
 			if (level.getTile(cx, cy).jumpable)
 				return true;
 		return false;
-	}
-	
-	public void addForce(float x, float y) {
-		efx += x;
-		efy += y;		
 	}
 
 	
