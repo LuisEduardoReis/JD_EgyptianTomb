@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" nextobjectid="40">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" nextobjectid="42">
  <tileset firstgid="1" name="tilesheet" tilewidth="64" tileheight="64" tilecount="256">
   <image source="../tilesheet.png" width="1024" height="1024"/>
   <tile id="0">
@@ -50,6 +50,7 @@
   <object id="31" type="enemy-snake" gid="289" x="320" y="1216" width="64" height="64"/>
   <object id="37" name="gate1" type="gate" gid="299" x="704" y="384" width="64" height="64">
    <properties>
+    <property name="inverted" value="true"/>
     <property name="lever" value="lever1"/>
    </properties>
   </object>

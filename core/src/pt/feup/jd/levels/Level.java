@@ -80,7 +80,7 @@ public class Level {
 		levelChange = false;
 		targetLevel = null; targetSpawn = null;	
 		
-		persistent = (map.getProperties().containsKey("persistent"));
+		persistent = !(map.getProperties().containsKey("volatile"));
 		
 		entities = new ArrayList<Entity>();
 		tileEntities = new HashMap<String, TileEntity>();
@@ -144,8 +144,8 @@ public class Level {
 				}
 			}
 		}
-		if (pd == null) spawns.put("default", new Vector2(0,0));
-		else spawns.put("default", pd);
+		if (!spawns.containsKey("default"))
+			spawns.put("default", (pd == null) ? new Vector2(0,0) : pd);
 		
 	}
 
