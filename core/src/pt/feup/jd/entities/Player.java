@@ -8,6 +8,7 @@ import pt.feup.jd.JDGame;
 import pt.feup.jd.Sprite;
 import pt.feup.jd.Util;
 import pt.feup.jd.levels.Level;
+import pt.feup.jd.levels.Tile;
 
 public class Player extends Entity {
 	
@@ -61,9 +62,19 @@ public class Player extends Entity {
 	
 	@Override
 	public void update(float delta) {
+		
+		boolean onGround = onGroundWide();
+		boolean onLadder = 
+				(level.getTile((int) (x / JDGame.TILE_SIZE), (int) ((y  - hy*0.5f - 4) / JDGame.TILE_SIZE)) == Tile.LADDER) ||
+				(level.getTile((int) (x / JDGame.TILE_SIZE), (int) ((y  + hy*0.5f) / JDGame.TILE_SIZE)) == Tile.LADDER);
+		
+		if (!onGround && onLadder) applyGravity = false;
+		else applyGravity = true;
+		
 		super.update(delta);
 		
 		// Movement
+		
 		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.LEFT))) {
 			vx = -MOVE_SPEED;
 			direction = -1;
@@ -79,8 +90,7 @@ public class Player extends Entity {
 			vx = 0;
 		}
 		
-		
-		if (onGroundWide()) {
+		if (onGround) {
 			jumpWindow = jumpWindowDelay;
 			jumped = false;
 		} else {
@@ -94,7 +104,18 @@ public class Player extends Entity {
 			jumped = true;
 		}
 		
+		if (onLadder) {
+			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) {
+				vy = 2*JDGame.TILE_SIZE;
+			} else
+			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.DOWN))) {
+				vy = -2*JDGame.TILE_SIZE;
+			} else {
+				vy = 0;
+			}
+		} 
 		
+				
 		// Weapon
 		gun_timer = Util.stepTo(gun_timer, 0, delta);
 		if (gun_timer == 0 && Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.FIRE))) {

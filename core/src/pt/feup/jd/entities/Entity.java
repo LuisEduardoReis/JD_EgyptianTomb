@@ -220,7 +220,7 @@ public class Entity {
 		int ts = JDGame.TILE_SIZE;
 		int cx = (int) Math.floor(x / ts);
 		int cy = (int) Math.floor((y - (hy*0.5f) - 4) / ts);
-		return level.getTile(cx,cy).solid;
+		return level.getTile(cx,cy).jumpable;
 	}
 	public boolean onGroundWide() {
 		if (vy > 0) return false;
@@ -229,7 +229,7 @@ public class Entity {
 		int mincx = (int) Math.floor((x - hx*0.5f) / ts);
 		int maxcx = (int) Math.floor((x + hx*0.5f) / ts);
 		for(int cx = mincx; cx <= maxcx; cx++)
-			if (level.getTile(cx, cy).solid)
+			if (level.getTile(cx, cy).jumpable)
 				return true;
 		return false;
 	}
