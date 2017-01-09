@@ -11,7 +11,7 @@ public class JDGame extends Game {
 	
 	public static final int TILE_SIZE = 64;
 	public static enum Keys {
-		UP,DOWN,LEFT,RIGHT, FIRE, OPEN_DOOR
+		UP,DOWN,LEFT,RIGHT, FIRE, USE
 	}
 	public static HashMap<Keys,Integer> keyBindings;
 	public static void initKeyBindings() {
@@ -21,7 +21,7 @@ public class JDGame extends Game {
 		keyBindings.put(Keys.LEFT,Input.Keys.LEFT);
 		keyBindings.put(Keys.RIGHT,Input.Keys.RIGHT);
 		keyBindings.put(Keys.FIRE,Input.Keys.CONTROL_LEFT);
-		keyBindings.put(Keys.OPEN_DOOR,Input.Keys.DOWN);
+		keyBindings.put(Keys.USE,Input.Keys.DOWN);
 	}
 	
 	public static boolean DEBUG = false;

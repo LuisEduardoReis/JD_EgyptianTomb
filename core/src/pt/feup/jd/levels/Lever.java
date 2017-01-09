@@ -38,7 +38,7 @@ public class Lever extends TileEntity implements Trigger {
 	public void collide() {
 		level.game.showLeverTooltip = true;
 		
-		if (Gdx.input.isKeyJustPressed(JDGame.keyBindings.get(JDGame.Keys.OPEN_DOOR))) {
+		if (Gdx.input.isKeyJustPressed(JDGame.keyBindings.get(JDGame.Keys.USE))) {
 			on = !on;
 		};
 	}

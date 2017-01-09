@@ -103,7 +103,7 @@ public class Entity {
 		damage_anim_timer = damage_anim_delay;
 	}
 	
-	private void die() {
+	public void die() {
 		dead = true;
 		remove = true;		
 	}

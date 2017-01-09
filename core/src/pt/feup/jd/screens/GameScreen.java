@@ -104,6 +104,13 @@ public class GameScreen extends ScreenAdapter {
 		fadeOut.reset();		
 	}
 	
+	public void fadeOut() {		
+		fadeIn.reset();
+			
+		fadeOut.reset();
+		fadeOut.start();
+	}
+	
 	private void gotoLevel(String name, String spawn) {
 		Player player = null;
 		
@@ -215,14 +222,20 @@ public class GameScreen extends ScreenAdapter {
 				String timerText = String.format("%d:%02d", t / 60, t % 60);
 				font.getData().setScale(3f);
 				layout.setText(font, timerText);
-				font.draw(batch, layout, (sw - layout.width)/2, sh-32);
+				font.draw(batch, layout, (sw - layout.width)/2, sh-16);
 			} 
 			
 			// Door Tooltip
 			if (showDoorTooltip) {
 				font.getData().setScale(1.5f);
-				layout.setText(font, "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.OPEN_DOOR))+" to open door.");
-				font.draw(batch, layout, (sw - layout.width)/2, sh-32);
+				layout.setText(font, "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.USE))+" to open door.");
+				font.draw(batch, layout, (sw - layout.width)/2, sh-64);
+			}
+			// Lever Tooltip
+			if (showLeverTooltip) {
+				font.getData().setScale(1.5f);
+				layout.setText(font, "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.USE))+" to pull lever.");
+				font.draw(batch, layout, (sw - layout.width)/2, sh-64);
 			}
 			// Aux
 			if (JDGame.DEBUG) {
@@ -245,11 +258,12 @@ public class GameScreen extends ScreenAdapter {
 
 	private void logic(float delta) {
 		// Logic
-		showDoorTooltip = false;
-		
 		if (levelChangeTimer < 0) {
 		
 			while(accum > tickdelay) {
+				showDoorTooltip = false;
+				showLeverTooltip = false;
+				
 				level.update(tickdelay);
 				accum -= tickdelay;
 			}

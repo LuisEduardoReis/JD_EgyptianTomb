@@ -73,7 +73,8 @@ public class Level {
 					"("+((cell.getTile().getId()-1) % 16)+", "+(cell.getTile().getId()-1)/16+")" 
 						));*/
 				if (cell != null) {
-					tiles[yy*map_width+xx] = Tile.TILESET[cell.getTile().getId()-1];
+					int cid = cell.getTile().getId()-1;
+					tiles[yy*map_width+xx] = (cid >= 0 && cid < Tile.TILESET.length) ? Tile.TILESET[cell.getTile().getId()-1] : Tile.AIR;
 				}
 			}
 			//System.out.println();	System.out.println();
@@ -195,7 +196,11 @@ public class Level {
 			trapTimer = Util.stepTo(trapTimer, 0, delta);
 			rumble += 2 + 3*(Math.sin(trapTimer)+1);
 		}
-		if (trapTimer == 0) player.remove = true;
+		if (trapTimer == 0 && player != null) {
+			player.damage(player.health);
+			game.fadeOut();
+			trapTimer = -1;
+		}
 		
 		// New entities
 		entities.addAll(newEntities);

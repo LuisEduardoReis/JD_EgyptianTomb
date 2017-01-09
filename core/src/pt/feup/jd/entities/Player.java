@@ -130,6 +130,11 @@ public class Player extends Entity {
 	}
 	
 	@Override
+	public void die() {
+		dead = true;
+	}
+	
+	@Override
 	public void entityCollision(Entity o) {
 		super.entityCollision(o);
 		
