@@ -137,6 +137,15 @@ public class Level {
 					tileEntities.put(lever.name, lever);
 					triggers.put(lever.name, lever);
 				}
+				// Fireball Trap
+				else if (type.equals("fireballtrap")) {
+					FireballTrap trap = new FireballTrap(this, o.getName(), p.x, p.y);
+					if (o.getProperties().containsKey("rotation")) trap.rotation =  ((Float) o.getProperties().get("rotation"));
+					if (o.getProperties().containsKey("delay")) trap.fireDelay =  ((Float) o.getProperties().get("delay"));
+					if (o.getProperties().containsKey("speed")) trap.fireSpeed =  ((Float) o.getProperties().get("speed"));
+					if (o.getProperties().containsKey("trigger")) trap.trigger =  ((String) o.getProperties().get("trigger"));
+					tileEntities.put(trap.name, trap);
+				}
 				// Enemies
 				else if (type.startsWith("enemy-")) {
 					// Snake
@@ -161,8 +170,11 @@ public class Level {
 		
 		// Triggers
 		if (player != null) { for(Trigger t : triggers.values()) {
-			if (Collision.aabbToaabb(player.x, player.y, player.hx, player.hy, t.getX(), t.getY(), t.getW(), t.getH()))
+			if (Collision.aabbToaabb(player.x, player.y, player.hx, player.hy, t.getX(), t.getY(), t.getW(), t.getH())) {
 				t.collide();
+				t.setActive(true);
+			} else
+				t.setActive(false);
 		}}
 		
 		// Entity collisions

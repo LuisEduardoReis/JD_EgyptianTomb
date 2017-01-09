@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 public class Util {
 
 	public static Random random = new Random();
+	public static float degToRad = (float) (Math.PI / 180);
+	
 	
 	public static boolean between(float x, float a, float b) {
 		return x >= a && x <= b;

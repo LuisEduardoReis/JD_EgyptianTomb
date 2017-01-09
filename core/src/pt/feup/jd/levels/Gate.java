@@ -22,7 +22,7 @@ public class Gate extends TileEntity {
 	public Gate(Level level, String name, float x, float y) {
 		super(level, name, x, y);	
 		
-		initSprites();
+		if (!initSprites) initSprites();
 		
 		open = false;
 		inverted = false;

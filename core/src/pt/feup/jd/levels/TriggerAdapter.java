@@ -7,6 +7,7 @@ public class TriggerAdapter implements Trigger {
 	Level level;
 	String name, targetLevel, targetSpawn;
 	boolean activateTrap;
+	boolean active;
 	
 	float x,y,w,h;
 
@@ -23,6 +24,8 @@ public class TriggerAdapter implements Trigger {
 		y = o.getRectangle().y;
 		w = o.getRectangle().width;
 		h = o.getRectangle().height;
+		
+		active = false;
 	}
 	
 	@Override
@@ -38,4 +41,10 @@ public class TriggerAdapter implements Trigger {
 	public float getW() { return w; }
 	@Override
 	public float getH() { return h; }
+
+	@Override
+	public boolean active() { return active; }
+
+	@Override
+	public void setActive(boolean active) { this.active = active; }
 }
