@@ -95,10 +95,10 @@ public class Entity {
 				anim_index = 0;
 			}
 		}
-		
 	}
 	
 	public void damage(float damage) {
+		if (dead) return;
 		health = Util.stepTo(health, 0, damage);
 		damage_anim_timer = damage_anim_delay;
 	}

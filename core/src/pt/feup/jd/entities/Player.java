@@ -19,6 +19,7 @@ public class Player extends Entity {
 	static Sprite idle_anim;
 	static Sprite walk_anim;
 	static Sprite jump_anim;
+	static Sprite ladder_anim;
 	static boolean initSprites = false;
 	static void initSprites() {
 		initSprites = true;
@@ -35,6 +36,11 @@ public class Player extends Entity {
 		
 		jump_anim = new Sprite();
 		jump_anim.addFrame(Assets.sprites64[1][3]);
+		
+		ladder_anim = new Sprite();
+		ladder_anim.anim_delay = 1/8f;
+		ladder_anim.addFrame(Assets.sprites64[1][4]);
+		ladder_anim.addFrame(Assets.sprites64[1][5]);
 	}
 	
 	float jumpWindow, jumpWindowDelay;
@@ -65,9 +71,10 @@ public class Player extends Entity {
 	public void update(float delta) {
 		
 		boolean onGround = onGroundWide();
-		boolean onLadder = 
-				(level.getTile((int) (x / JDGame.TILE_SIZE), (int) ((y  - hy*0.5f - 4) / JDGame.TILE_SIZE)) == Tile.LADDER) ||
-				(level.getTile((int) (x / JDGame.TILE_SIZE), (int) ((y  + hy*0.5f) / JDGame.TILE_SIZE)) == Tile.LADDER);
+		boolean feetOnLadder = (level.getTile((int) (x / JDGame.TILE_SIZE), (int) ((y  - hy*0.5f) / JDGame.TILE_SIZE)) == Tile.LADDER);
+		boolean aboveLadder  = (level.getTile((int) (x / JDGame.TILE_SIZE), (int) ((y  - hy*0.5f - 4) / JDGame.TILE_SIZE)) == Tile.LADDER);
+		boolean headOnLadder = (level.getTile((int) (x / JDGame.TILE_SIZE), (int) ((y  + hy*0.5f) / JDGame.TILE_SIZE)) == Tile.LADDER);
+		boolean onLadder = feetOnLadder || headOnLadder || aboveLadder;
 		
 		if (!onGround && onLadder) applyGravity = false;
 		else applyGravity = true;
@@ -75,46 +82,48 @@ public class Player extends Entity {
 		super.update(delta);
 		
 		// Movement
-		
-		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.LEFT))) {
-			vx = -MOVE_SPEED;
-			direction = -1;
-			setSprite(walk_anim);
-		}
-		else if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.RIGHT))) {
-			vx = MOVE_SPEED;
-			direction = 1;
-			setSprite(walk_anim);
-		}
-		else {
-			setSprite(idle_anim);
-			vx = 0;
-		}
-		
-		if (onGround) {
-			jumpWindow = jumpWindowDelay;
-			jumped = false;
-		} else {
-			setSprite(jump_anim);
-		}
-		
-		jumpWindow = Util.stepTo(jumpWindow,0,delta);
-		
-		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && jumpWindow>0 && !jumped) {
-			vy = JUMP_SPEED;
-			jumped = true;
-		}
-		
-		if (onLadder) {
-			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) {
-				vy = LADDER_SPEED;
-			} else
-			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.DOWN))) {
-				vy = -LADDER_SPEED;
-			} else {
-				vy = 0;
+		if (!dead) {
+			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.LEFT))) {
+				vx = -MOVE_SPEED;
+				direction = -1;
+				setSprite(walk_anim);
 			}
-		} 
+			else if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.RIGHT))) {
+				vx = MOVE_SPEED;
+				direction = 1;
+				setSprite(walk_anim);
+			}
+			else {
+				setSprite(idle_anim);
+				vx = 0;
+			}
+			
+			if (onGround) {
+				jumpWindow = jumpWindowDelay;
+				jumped = false;
+			} else {
+				setSprite(jump_anim);
+			}
+			
+			jumpWindow = Util.stepTo(jumpWindow,0,delta);
+			
+			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && jumpWindow>0 && !jumped) {
+				vy = JUMP_SPEED;
+				jumped = true;
+			}
+			
+			if (onLadder) {
+				if (!aboveLadder || headOnLadder || feetOnLadder) setSprite(ladder_anim);
+				if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) {
+					vy = LADDER_SPEED;
+				} else
+				if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.DOWN))) {
+					vy = -LADDER_SPEED;
+				} else {
+					vy = 0;
+				}
+			} 
+		}
 		
 				
 		// Weapon
