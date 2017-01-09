@@ -129,6 +129,17 @@ public class Player extends Entity {
 	}
 	
 	@Override
+	public void entityCollision(Entity o) {
+		super.entityCollision(o);
+		
+		if (o instanceof Fireball) {
+			damage(((Fireball) o).damage);
+			o.remove = true;
+		}
+		
+	}
+	
+	@Override
 	public void renderLight(SpriteBatch batch) {		
 		Util.drawLight(batch, x, y, 7f, 7f, 1, 1, 0.75f, 1);
 	}

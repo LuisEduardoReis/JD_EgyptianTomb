@@ -22,7 +22,7 @@ public class Gate extends TileEntity {
 	public Gate(Level level, String name, float x, float y) {
 		super(level, name, x, y);	
 		
-		initSprites();
+		if (!initSprites) initSprites();
 		
 		open = false;
 		inverted = false;
@@ -32,7 +32,7 @@ public class Gate extends TileEntity {
 	public void update(float delta) {
 		if (lever != null && level.tileEntities.containsKey(lever)) {
 			Lever leverObj = (Lever) level.tileEntities.get(lever);
-			open = leverObj.on;
+			open = leverObj.on ^ inverted;
 		} 
 		level.setTile(xi,yi, open ? Tile.AIR : Tile.SOLID);
 	}

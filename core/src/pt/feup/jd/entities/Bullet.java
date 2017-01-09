@@ -24,7 +24,6 @@ public class Bullet extends Entity {
 		
 		if (!initSprites) initSprites();
 		
-		sprite = default_anim;
 		
 		applyGravity = false;
 		

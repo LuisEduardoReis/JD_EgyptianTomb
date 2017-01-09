@@ -23,7 +23,7 @@ public class Lever extends TileEntity implements Trigger {
 	public Lever(Level level, String name, float x, float y) {
 		super(level, name, x, y);
 		
-		initSprites();
+		if (!initSprites) initSprites();
 		
 		on = false;
 	}
@@ -44,11 +44,17 @@ public class Lever extends TileEntity implements Trigger {
 	}
 
 	@Override
-	public float getX() { return xi * JDGame.TILE_SIZE; }
+	public float getX() { return x; }
 	@Override
-	public float getY() { return yi * JDGame.TILE_SIZE; }
+	public float getY() { return y; }
 	@Override
 	public float getW() { return JDGame.TILE_SIZE; }
 	@Override
 	public float getH() { return JDGame.TILE_SIZE; }
+
+	@Override
+	public boolean active() { return false; }
+
+	@Override
+	public void setActive(boolean active) {}
 }
