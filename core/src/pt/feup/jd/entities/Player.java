@@ -113,7 +113,10 @@ public class Player extends Entity {
 			}
 			
 			if (onLadder) {
-				if (!aboveLadder || headOnLadder || feetOnLadder) setSprite(ladder_anim);
+				if (!aboveLadder || headOnLadder || feetOnLadder) {
+					direction = (y % 64) < 32 ? 1 : -1;
+					setSprite(ladder_anim);
+				}
 				if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) {
 					vy = LADDER_SPEED;
 				} else
@@ -122,7 +125,11 @@ public class Player extends Entity {
 				} else {
 					vy = 0;
 				}
+				
 			} 
+		} else {
+			setSprite(idle_anim); // dead_anim
+			vx = 0;
 		}
 		
 				

@@ -260,7 +260,7 @@ public class GameScreen extends ScreenAdapter {
 		// Logic
 		if (levelChangeTimer < 0) {
 		
-			while(accum > tickdelay) {
+			if(accum > tickdelay) {
 				showDoorTooltip = false;
 				showLeverTooltip = false;
 				
