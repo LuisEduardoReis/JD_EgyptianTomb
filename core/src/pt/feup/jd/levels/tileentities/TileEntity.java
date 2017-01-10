@@ -1,19 +1,20 @@
-package pt.feup.jd.levels;
+package pt.feup.jd.levels.tileentities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
 
 import pt.feup.jd.JDGame;
+import pt.feup.jd.levels.Level;
 
 public class TileEntity {
 
-	Level level;
-	String name;
-	float x,y;
-	int xi, yi;
-	TextureRegion sprite;
-	float rotation;
+	protected Level level;
+	public String name;
+	protected float x,y;
+	protected int xi, yi;
+	protected TextureRegion sprite;
+	public float rotation;
 	
 	public TileEntity(Level level, String name, float x, float y) {
 		this.level = level;

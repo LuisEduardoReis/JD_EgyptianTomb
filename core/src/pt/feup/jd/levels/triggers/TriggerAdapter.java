@@ -1,15 +1,17 @@
-package pt.feup.jd.levels;
+package pt.feup.jd.levels.triggers;
 
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 
+import pt.feup.jd.levels.Level;
+
 public class TriggerAdapter implements Trigger {
 	
-	Level level;
-	String name, targetLevel, targetSpawn;
+	protected Level level;
+	public String name, targetLevel, targetSpawn;
 	boolean activateTrap;
 	boolean active;
 	
-	float x,y,w,h;
+	protected float x,y,w,h;
 
 	public TriggerAdapter(Level level, RectangleMapObject o) {
 		this.level = level;

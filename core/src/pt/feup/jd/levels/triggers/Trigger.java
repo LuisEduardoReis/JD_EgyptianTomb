@@ -1,4 +1,4 @@
-package pt.feup.jd.levels;
+package pt.feup.jd.levels.triggers;
 
 public interface Trigger {
 

@@ -22,6 +22,14 @@ import pt.feup.jd.entities.Enemy;
 import pt.feup.jd.entities.Entity;
 import pt.feup.jd.entities.Player;
 import pt.feup.jd.entities.Snake;
+import pt.feup.jd.levels.tileentities.FireballTrap;
+import pt.feup.jd.levels.tileentities.Gate;
+import pt.feup.jd.levels.tileentities.Lever;
+import pt.feup.jd.levels.tileentities.TileEntity;
+import pt.feup.jd.levels.tileentities.shop.HealthPack;
+import pt.feup.jd.levels.triggers.Door;
+import pt.feup.jd.levels.triggers.Trigger;
+import pt.feup.jd.levels.triggers.TriggerAdapter;
 import pt.feup.jd.screens.GameScreen;
 
 public class Level {
@@ -36,8 +44,8 @@ public class Level {
 	public ArrayList<Entity> entities;
 	ArrayList<Entity> newEntities;
 	HashMap<String, Vector2> spawns;
-	HashMap<String, Trigger> triggers;
-	HashMap<String, TileEntity> tileEntities;
+	public HashMap<String, Trigger> triggers;
+	public HashMap<String, TileEntity> tileEntities;
 	
 	Vector2 cameraPosition;
 	
@@ -164,6 +172,16 @@ public class Level {
 					if (e != null) {
 						if (o.getProperties().containsKey("range")) e.range = Float.parseFloat((String) o.getProperties().get("range"));
 					}
+				}
+				// Shop
+				else if (type.startsWith("shop-")) {
+					// Health Pack
+					if (type.equals("shop-health")) {
+						HealthPack health = new HealthPack(this, o.getName(), p.x, p.y);
+						tileEntities.put(health.name, health);
+						triggers.put(health.name, health);
+					}					
+					
 				}
 			}
 		}

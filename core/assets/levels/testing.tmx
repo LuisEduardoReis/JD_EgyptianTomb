@@ -37,7 +37,8 @@
   </object>
   <object id="26" name="door1" type="door" x="128" y="128" width="64" height="64">
    <properties>
-    <property name="targetSpawn" value="door3"/>
+    <property name="targetLevel" value="shop"/>
+    <property name="targetSpawn" value="door1"/>
    </properties>
   </object>
   <object id="28" name="door2" type="door" x="1088" y="320" width="64" height="64">

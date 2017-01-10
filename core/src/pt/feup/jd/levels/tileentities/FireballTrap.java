@@ -1,4 +1,4 @@
-package pt.feup.jd.levels;
+package pt.feup.jd.levels.tileentities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -7,6 +7,7 @@ import pt.feup.jd.Assets;
 import pt.feup.jd.JDGame;
 import pt.feup.jd.Util;
 import pt.feup.jd.entities.Fireball;
+import pt.feup.jd.levels.Level;
 
 public class FireballTrap extends TileEntity {
 
@@ -18,8 +19,8 @@ public class FireballTrap extends TileEntity {
 		main_spr = Assets.sprites64[5][4];
 	}
 	
-	String trigger;
-	float fireTimer, fireDelay, fireSpeed;
+	public String trigger;
+	public float fireTimer, fireDelay, fireSpeed;
 
 	public FireballTrap(Level level, String name, float x, float y) {
 		super(level, name, x, y);

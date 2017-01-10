@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -36,8 +35,9 @@ public class GameScreen extends ScreenAdapter {
 	// Logic
 	Level level;
 	HashMap<String, Level> levels;
+	boolean paused;
 	
-	int coins;
+	public int coins;
 	
 	float levelChangeTimer, levelChangeDelay;
 	
@@ -50,8 +50,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	ShapeRenderer shapeRenderer;
 	
-	public boolean showDoorTooltip;
-	public boolean showLeverTooltip;
+	public String tooltip;
 	
 	Texture fillTexture;
 	
@@ -62,9 +61,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	FadeEffect fadeIn, fadeOut;
 	
-	// Shop
-	ShopSubScreen shop;
-
+	HUD hud;
 	
 	@Override
 	public void show() {
@@ -82,6 +79,8 @@ public class GameScreen extends ScreenAdapter {
 		fadeOut = new FadeEffect();
 		fadeOut.duration = 2f;
 		
+		paused = false;
+		
 		coins = 0;
 		
 		// Render
@@ -97,9 +96,8 @@ public class GameScreen extends ScreenAdapter {
 		defaultShader = new ShaderProgram(Assets.vertexShader, Assets.defaultFragmentShader);
 		shader = new ShaderProgram(Assets.vertexShader, Assets.fragmentShader);
 		
-		// Shop
-		shop = null;
-				
+		hud = new HUD(this);
+					
 		// Start
 		gotoLevel("testing", null);
 		fadeIn();
@@ -156,7 +154,6 @@ public class GameScreen extends ScreenAdapter {
 	}
 	
 	float accum = 0;
-	GlyphLayout layout = new GlyphLayout();
 	public static final float tickdelay = 1/60f;
 	@Override
 	public void render(float delta) {
@@ -214,73 +211,16 @@ public class GameScreen extends ScreenAdapter {
 		}
 		
 		// HUD
-		int sw = viewport.getScreenWidth(), sh = viewport.getScreenHeight();
-		camera.position.set(sw/2,sh/2,0);
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
-		batch.setShader(defaultShader);
-		batch.begin();
-			// Health
-			float health = level.player.health;
-			for(int i = 0; i < health/10; i++) batch.draw(Assets.sprites32[4][1], 16*i, sh-32);
-			
-			// Coins
-			if (coins > 0) {
-				batch.draw(Assets.sprites32[5][0], -16, sh-64-16, 64,64);
-				font.getData().setScale(1.5f);
-				layout.setText(font, ""+coins); 
-				font.draw(batch, layout, 32, sh-64 + 1.5f*layout.height);
-			}
-			// Timer
-			if (level.trapTimer != -1) {
-				int t = (int) Math.floor(level.trapTimer);
-				String timerText = String.format("%d:%02d", t / 60, t % 60);
-				font.getData().setScale(3f);
-				layout.setText(font, timerText);
-				font.draw(batch, layout, (sw - layout.width)/2, sh-16);
-			} 
-			
-			// Door Tooltip
-			if (showDoorTooltip) {
-				font.getData().setScale(1.5f);
-				layout.setText(font, "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.USE))+" to open door.");
-				font.draw(batch, layout, (sw - layout.width)/2, sh-64);
-			}
-			// Lever Tooltip
-			if (showLeverTooltip) {
-				font.getData().setScale(1.5f);
-				layout.setText(font, "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.USE))+" to pull lever.");
-				font.draw(batch, layout, (sw - layout.width)/2, sh-64);
-			}
-			// Aux
-			if (JDGame.DEBUG) {
-				font.getData().setScale(1f);
-				font.draw(batch, "v(" + level.player.vx + "; " + level.player.vy+")",20,20);
-				font.draw(batch, "p(" + level.player.x + "; " + level.player.y+")",20,40);
-				font.draw(batch, levelChangeTimer+"",20,60);
-			}
-			// Fade in/out
-			float f = 0;
-			f += fadeIn.getValue();
-			f += fadeOut.getValue();			
-			batch.setColor(0, 0, 0, f);
-			batch.draw(fillTexture,0,0);
-			batch.setColor(1,1,1,1);
-			
-		batch.end();
-		
-		// Shop	
-		if (shop != null) shop.render(delta);
+		hud.render();
 	
 	}
 
 	private void logic(float delta) {
 		// Logic
-		if (levelChangeTimer < 0 && shop == null) {
+		if (levelChangeTimer < 0 && !paused) {
 		
 			if(accum > tickdelay) {
-				showDoorTooltip = false;
-				showLeverTooltip = false;
+				tooltip = null;
 				
 				level.update(tickdelay);
 				accum -= tickdelay;
@@ -303,15 +243,12 @@ public class GameScreen extends ScreenAdapter {
 		
 		fadeIn.update(delta);
 		fadeOut.update(delta);
-		
-		if (Gdx.input.isKeyJustPressed(Input.Keys.S)) shop = (shop == null) ? new ShopSubScreen(this) : null;
-		
+				
 		if (Gdx.input.isKeyJustPressed(Input.Keys.D)) JDGame.DEBUG ^= true;
 	}
 	
-	public void addCoins(int v) {
-		coins += v;		
-	}
+	public void addCoins(int v) {coins += v;}
+	public void takeCoins(int v) { coins -= v;}
 	
 	@Override
 	public void resize(int width, int height) {
@@ -331,4 +268,6 @@ public class GameScreen extends ScreenAdapter {
 		
 		viewport.update(width, height);
 	}
+
+	
 }

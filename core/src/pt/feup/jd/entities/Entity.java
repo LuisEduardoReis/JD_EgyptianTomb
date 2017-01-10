@@ -114,6 +114,10 @@ public class Entity {
 		health = Util.stepTo(health, 0, damage);
 		damage_anim_timer = damage_anim_delay;
 	}
+	public void heal(float heal) {
+		if (dead) return;
+		health = Util.stepTo(health, 100, heal);
+	}
 	
 	public void die() {
 		dead = true;

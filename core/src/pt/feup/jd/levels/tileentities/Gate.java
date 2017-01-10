@@ -1,9 +1,11 @@
-package pt.feup.jd.levels;
+package pt.feup.jd.levels.tileentities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import pt.feup.jd.Assets;
+import pt.feup.jd.levels.Level;
+import pt.feup.jd.levels.Tile;
 
 public class Gate extends TileEntity {
 
@@ -16,8 +18,8 @@ public class Gate extends TileEntity {
 		closed_spr = Assets.sprites64[5][3];
 	}
 	
-	boolean open, inverted;
-	String lever;
+	public boolean open, inverted;
+	public String lever;
 	
 	public Gate(Level level, String name, float x, float y) {
 		super(level, name, x, y);	

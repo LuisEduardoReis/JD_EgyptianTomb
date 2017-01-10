@@ -1,9 +1,11 @@
-package pt.feup.jd.levels;
+package pt.feup.jd.levels.triggers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 
 import pt.feup.jd.JDGame;
+import pt.feup.jd.levels.Level;
 
 public class Door extends TriggerAdapter {
 
@@ -14,7 +16,7 @@ public class Door extends TriggerAdapter {
 	@Override
 	public void collide() {
 		if (targetLevel != null || targetSpawn != null)
-			level.game.showDoorTooltip = true;
+			level.game.tooltip = "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.USE))+" to open door.";
 		
 		if (Gdx.input.isKeyJustPressed(JDGame.keyBindings.get(JDGame.Keys.USE))) {
 			if (targetLevel == null && targetSpawn != null) level.gotoLevel(level.name, targetSpawn);
