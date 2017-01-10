@@ -36,8 +36,8 @@
     <property name="targetSpawn" value="door1"/>
    </properties>
   </object>
-  <object id="54" type="shop-health" x="256" y="384" width="64" height="64"/>
-  <object id="56" type="shop-shotgun" x="384" y="384" width="64" height="64"/>
-  <object id="57" type="shop-hammer" x="768" y="384" width="64" height="64"/>
+  <object id="54" name="shop1" type="shop-health" x="256" y="384" width="64" height="64"/>
+  <object id="56" name="shop2" type="shop-shotgun" x="384" y="384" width="64" height="64"/>
+  <object id="57" name="shop3" type="shop-hammer" x="768" y="384" width="64" height="64"/>
  </objectgroup>
 </map>

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -26,6 +27,7 @@ import pt.feup.jd.levels.tileentities.FireballTrap;
 import pt.feup.jd.levels.tileentities.Gate;
 import pt.feup.jd.levels.tileentities.Lever;
 import pt.feup.jd.levels.tileentities.TileEntity;
+import pt.feup.jd.levels.tileentities.shop.AmmoPack;
 import pt.feup.jd.levels.tileentities.shop.HealthPack;
 import pt.feup.jd.levels.triggers.Door;
 import pt.feup.jd.levels.triggers.Trigger;
@@ -120,6 +122,7 @@ public class Level {
 			for(MapObject o : objects){
 				String type = (String) o.getProperties().get("type");
 				Vector2 p = Util.getMapObjectPosition(o);
+				MapProperties prop = o.getProperties();
 				
 				// Spawns
 				if (type.equals("spawn")) {
@@ -141,9 +144,8 @@ public class Level {
 				// Gates
 				else if (type.equals("gate")) {
 					Gate gate = new Gate(this, o.getName(), p.x,p.y);
-					if (o.getProperties().containsKey("lever")) 
-						gate.lever = (String) o.getProperties().get("lever");
-					gate.inverted = o.getProperties().containsKey("inverted");
+					if (prop.containsKey("lever")) gate.lever = (String) prop.get("lever");
+					gate.inverted = prop.containsKey("inverted");
 					tileEntities.put(gate.name, gate);
 				}
 				// Lever
@@ -155,10 +157,10 @@ public class Level {
 				// Fireball Trap
 				else if (type.equals("fireballtrap")) {
 					FireballTrap trap = new FireballTrap(this, o.getName(), p.x, p.y);
-					if (o.getProperties().containsKey("rotation")) trap.rotation =  Float.parseFloat((String) o.getProperties().get("rotation"));
-					if (o.getProperties().containsKey("delay")) trap.fireDelay =  Float.parseFloat((String) o.getProperties().get("delay"));
-					if (o.getProperties().containsKey("speed")) trap.fireSpeed =  Float.parseFloat((String) o.getProperties().get("speed"));
-					if (o.getProperties().containsKey("trigger")) trap.trigger =  ((String) o.getProperties().get("trigger"));
+					if (prop.containsKey("rotation")) trap.rotation =  Float.parseFloat((String) prop.get("rotation"));
+					if (prop.containsKey("delay")) trap.fireDelay =  Float.parseFloat((String) prop.get("delay"));
+					if (prop.containsKey("speed")) trap.fireSpeed =  Float.parseFloat((String) prop.get("speed"));
+					if (prop.containsKey("trigger")) trap.trigger =  ((String) prop.get("trigger"));
 					tileEntities.put(trap.name, trap);
 				}
 				// Enemies
@@ -177,11 +179,23 @@ public class Level {
 				else if (type.startsWith("shop-")) {
 					// Health Pack
 					if (type.equals("shop-health")) {
-						HealthPack health = new HealthPack(this, o.getName(), p.x, p.y);
-						tileEntities.put(health.name, health);
-						triggers.put(health.name, health);
-					}					
-					
+						System.out.println("oi");
+						HealthPack healthShop = new HealthPack(this, o.getName(), p.x, p.y);
+						tileEntities.put(healthShop.name, healthShop);
+						triggers.put(healthShop.name, healthShop);
+						
+						if (prop.containsKey("cost")) healthShop.cost = Integer.parseInt((String) prop.get("cost"));
+						if (prop.containsKey("heal")) healthShop.heal = Integer.parseInt((String) prop.get("heal"));
+					} else					
+					// Ammo Pack
+					if (type.equals("shop-shotgun")) {
+						AmmoPack ammoShop = new AmmoPack(this, o.getName(), p.x, p.y);
+						tileEntities.put(ammoShop.name, ammoShop);
+						triggers.put(ammoShop.name, ammoShop);
+						
+						if (prop.containsKey("cost")) ammoShop.cost = Integer.parseInt((String) prop.get("cost"));
+						if (prop.containsKey("ammount")) ammoShop.ammount = Integer.parseInt((String) prop.get("ammount"));
+					}	
 				}
 			}
 		}

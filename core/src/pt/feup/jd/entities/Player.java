@@ -1,6 +1,7 @@
 package pt.feup.jd.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import pt.feup.jd.Assets;
@@ -15,11 +16,13 @@ public class Player extends Entity {
 	public static final float MOVE_SPEED = 5*JDGame.TILE_SIZE;
 	public static final float JUMP_SPEED = (float) Math.sqrt(2*Entity.GRAVITY*2.5*JDGame.TILE_SIZE);
 	public static final float LADDER_SPEED = 4*JDGame.TILE_SIZE;
+	public static final int MAX_AMMO = 100;
 	
 	static Sprite idle_anim;
 	static Sprite walk_anim;
 	static Sprite jump_anim;
 	static Sprite ladder_anim;
+	static Sprite shotgun_spr;
 	static boolean initSprites = false;
 	static void initSprites() {
 		initSprites = true;
@@ -41,12 +44,17 @@ public class Player extends Entity {
 		ladder_anim.anim_delay = 1/8f;
 		ladder_anim.addFrame(Assets.sprites64[1][4]);
 		ladder_anim.addFrame(Assets.sprites64[1][5]);
+		
+		shotgun_spr = new Sprite(); 
+		shotgun_spr.addFrame(Assets.sprites64[2][2]);
 	}
 	
 	float jumpWindow, jumpWindowDelay;
 	boolean jumped;
 	
-	float gun_delay, gun_timer;
+	public int ammo;
+	float gun_delay, gun_timer, gun_sway;
+	boolean can_shoot;
 	
 	public Player(Level level) {
 		super(level);
@@ -65,6 +73,10 @@ public class Player extends Entity {
 		
 		gun_timer = 0;
 		gun_delay = 0.25f;
+		gun_sway = 0;
+		can_shoot = true;
+		
+		ammo = 10;
 	}
 	
 	@Override
@@ -78,6 +90,8 @@ public class Player extends Entity {
 		
 		if (!onGround && onLadder) applyGravity = false;
 		else applyGravity = true;
+		
+		can_shoot = true;
 		
 		super.update(delta);
 		
@@ -114,8 +128,9 @@ public class Player extends Entity {
 			
 			if (onLadder) {
 				if (!aboveLadder || headOnLadder || feetOnLadder) {
-					direction = (y % 64) < 32 ? 1 : -1;
+					direction = (y % JDGame.TILE_SIZE) < JDGame.TILE_SIZE/2 ? 1 : -1;
 					setSprite(ladder_anim);
+					can_shoot = false;
 				}
 				if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) {
 					vy = LADDER_SPEED;
@@ -131,17 +146,19 @@ public class Player extends Entity {
 			setSprite(idle_anim); // dead_anim
 			vx = 0;
 		}
-		
+			
 				
 		// Weapon
 		gun_timer = Util.stepTo(gun_timer, 0, delta);
-		if (gun_timer == 0 && Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.FIRE))) {
-			Bullet b = (Bullet) new Bullet(level).moveTo(x, y);
+		if (can_shoot && gun_timer == 0 && ammo > 0 && Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.FIRE))) {
+			Bullet b = (Bullet) new Bullet(level).moveTo(x + direction*28, y-10);
 			float s = 7.5f*JDGame.TILE_SIZE;
 			b.vx = direction * s;
 			
 			gun_timer = gun_delay;
+			ammo--;
 		}
+		gun_sway += (vx != 0 && onGround) ? delta : 0;
 		
 	}
 	
@@ -149,6 +166,20 @@ public class Player extends Entity {
 	public void die() {
 		dead = true;
 	}
+	
+	
+	@Override
+	public void render(SpriteBatch batch) {
+		if (ammo > 0 && can_shoot) {
+			shotgun_spr.render(batch, 0, 
+					x+(direction * 8), (float) (y + 3*Math.sin(2*Math.PI*4*gun_sway)), 
+					direction, 1, 
+					0, Color.WHITE);
+		}
+
+		super.render(batch);
+	}
+	
 	
 	@Override
 	public void renderLight(SpriteBatch batch) {		
