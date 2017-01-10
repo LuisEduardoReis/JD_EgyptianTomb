@@ -22,7 +22,8 @@ public class Player extends Entity {
 	static Sprite walk_anim;
 	static Sprite jump_anim;
 	static Sprite ladder_anim;
-	static Sprite shotgun_spr;
+	static Sprite dead_anim;
+	static Sprite shotgun_spr;	
 	static boolean initSprites = false;
 	static void initSprites() {
 		initSprites = true;
@@ -41,9 +42,10 @@ public class Player extends Entity {
 		jump_anim.addFrame(Assets.sprites64[1][3]);
 		
 		ladder_anim = new Sprite();
-		ladder_anim.anim_delay = 1/8f;
 		ladder_anim.addFrame(Assets.sprites64[1][4]);
-		ladder_anim.addFrame(Assets.sprites64[1][5]);
+		
+		dead_anim = new Sprite();
+		dead_anim.addFrame(Assets.sprites64[1][5]);
 		
 		shotgun_spr = new Sprite(); 
 		shotgun_spr.addFrame(Assets.sprites64[2][2]);
@@ -143,7 +145,7 @@ public class Player extends Entity {
 				
 			} 
 		} else {
-			setSprite(idle_anim); // dead_anim
+			setSprite(dead_anim);
 			vx = 0;
 		}
 			
@@ -158,7 +160,7 @@ public class Player extends Entity {
 			gun_timer = gun_delay;
 			ammo--;
 		}
-		gun_sway += (vx != 0 && onGround) ? delta : 0;
+		if (vx != 0 && onGround) gun_sway += delta;
 		
 	}
 	
@@ -170,7 +172,7 @@ public class Player extends Entity {
 	
 	@Override
 	public void render(SpriteBatch batch) {
-		if (ammo > 0 && can_shoot) {
+		if (ammo > 0 && can_shoot && !dead) {
 			shotgun_spr.render(batch, 0, 
 					x+(direction * 8), (float) (y + 3*Math.sin(2*Math.PI*4*gun_sway)), 
 					direction, 1, 
