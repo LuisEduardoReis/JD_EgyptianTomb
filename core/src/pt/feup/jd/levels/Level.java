@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import pt.feup.jd.JDGame;
 import pt.feup.jd.Util;
+import pt.feup.jd.entities.Enemy;
 import pt.feup.jd.entities.Entity;
 import pt.feup.jd.entities.Player;
 import pt.feup.jd.entities.Snake;
@@ -154,8 +155,15 @@ public class Level {
 				}
 				// Enemies
 				else if (type.startsWith("enemy-")) {
+					Enemy e = null;
 					// Snake
-					if (type.equals("enemy-snake")) new Snake(this).moveTo(p.x,p.y);
+					if (type.equals("enemy-snake")) e = (Snake) new Snake(this).moveTo(p.x,p.y);
+					
+					
+					// Common Properties
+					if (e != null) {
+						if (o.getProperties().containsKey("range")) e.range = Float.parseFloat((String) o.getProperties().get("range"));
+					}
 				}
 			}
 		}

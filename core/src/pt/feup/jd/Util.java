@@ -8,6 +8,8 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
 
+import pt.feup.jd.entities.Entity;
+
 public class Util {
 
 	public static Random random = new Random();
@@ -55,5 +57,14 @@ public class Util {
 		batch.setColor(r,g,b,a);
 		batch.draw(Assets.light, x - w/2, y - h/2, w,h);
 		batch.setColor(1, 1, 1, 1);
+	}
+
+	public static float pointDistance(float x, float y, float x2, float y2) {
+		x -= x2; y -= y2;
+		return (float) Math.sqrt(x*x + y*y);
+	}
+
+	public static float pointDistance(Entity a, Entity b) {
+		return Util.pointDistance(a.x,a.y,b.x,b.y);
 	}
 }

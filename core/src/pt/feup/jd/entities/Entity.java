@@ -32,14 +32,18 @@ public class Entity {
 	public Sprite sprite;
 	public float anim_timer, anim_speed; 
 	public int anim_index;
-	public float rotation;
 	
+	public float rotation;	
+	public float offset_x, offset_y;
+	public float scale_x, scale_y;
 	
 	public float health;
 	public float damage_anim_timer, damage_anim_delay;
 	public boolean dead;
 	
 	public boolean remove = true;
+	
+	public float t;
 
 	
 	
@@ -68,6 +72,12 @@ public class Entity {
 		remove = false;
 		
 		rotation = 0;
+		offset_x = 0; 
+		offset_y = 0;
+		scale_x = 1;
+		scale_y = 1;
+		
+		t = 0;
 	}
 	
 	public void preupdate(float delta) {
@@ -79,6 +89,8 @@ public class Entity {
 		if (applyGravity) vy-=GRAVITY*delta;
 		
 		if (health <= 0 && !dead) die(); 
+		
+		t += delta;
 		
 		// Animation
 		damage_anim_timer = Util.stepTo(damage_anim_timer, 0, delta);
@@ -133,7 +145,7 @@ public class Entity {
 				float s = damage_anim_timer / damage_anim_delay;
 				color.set(1,1-s,1-s,1);
 			}
-			sprite.render(batch,anim_index, x,y, direction, 1, rotation, color);
+			sprite.render(batch,anim_index, x + offset_x, y + offset_y, direction*scale_x, scale_y, rotation, color);
 		}
 	}
 	
@@ -205,7 +217,12 @@ public class Entity {
 		if (t == Tile.SPIKE) damage(health);
 	}
 
-	public void entityCollision(Entity other) {
+	public void entityCollision(Entity o) {
+		
+		if (o instanceof Fireball) {
+			damage(((Fireball) o).damage);
+			o.remove = true;
+		}
 		
 	}
 	

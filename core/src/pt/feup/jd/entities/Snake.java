@@ -1,7 +1,9 @@
 package pt.feup.jd.entities;
 
 import pt.feup.jd.Assets;
+import pt.feup.jd.JDGame;
 import pt.feup.jd.Sprite;
+import pt.feup.jd.Util;
 import pt.feup.jd.levels.Level;
 
 public class Snake extends Enemy {
@@ -32,6 +34,17 @@ public class Snake extends Enemy {
 		turnOnEdge = true;
 		
 		contactDamage = 25;
+	}
+	
+	@Override
+	public void die() {
+		super.die();
+
+		for(int i = 0; i < 3; i++) {
+			Coin coin = (Coin) new Coin(level).moveTo(x,y);
+			coin.vy = Util.randomRange(2*JDGame.TILE_SIZE, 4*JDGame.TILE_SIZE);
+			coin.vx = Util.randomRange(-JDGame.TILE_SIZE, JDGame.TILE_SIZE);
+		}
 	}
 
 }

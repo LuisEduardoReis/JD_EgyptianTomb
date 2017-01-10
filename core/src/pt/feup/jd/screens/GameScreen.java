@@ -37,6 +37,8 @@ public class GameScreen extends ScreenAdapter {
 	Level level;
 	HashMap<String, Level> levels;
 	
+	int coins;
+	
 	float levelChangeTimer, levelChangeDelay;
 	
 	// Render
@@ -77,6 +79,7 @@ public class GameScreen extends ScreenAdapter {
 		fadeOut = new FadeEffect();
 		fadeOut.duration = 2f;
 		
+		coins = 0;
 		
 		// Render
 		camera = new OrthographicCamera();
@@ -216,6 +219,12 @@ public class GameScreen extends ScreenAdapter {
 			float health = level.player.health;
 			for(int i = 0; i < health/10; i++) batch.draw(Assets.sprites32[4][1], 16*i, sh-32);
 			
+			// Coins
+			if (coins > 0) {
+				batch.draw(Assets.sprites32[5][0], -16, sh-64-16, 64,64);
+				layout.setText(font, ""+coins); 
+				font.draw(batch, layout, 32, sh-64 + 1.5f*layout.height);
+			}
 			// Timer
 			if (level.trapTimer != -1) {
 				int t = (int) Math.floor(level.trapTimer);
@@ -289,6 +298,9 @@ public class GameScreen extends ScreenAdapter {
 		if (Gdx.input.isKeyJustPressed(Input.Keys.D)) JDGame.DEBUG ^= true;
 	}
 	
+	public void addCoins(int v) {
+		coins += v;		
+	}
 	
 	@Override
 	public void resize(int width, int height) {
