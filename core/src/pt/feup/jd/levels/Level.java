@@ -217,7 +217,7 @@ public class Level {
 		// Remove old entities
 		for(int i = 0; i < entities.size(); i++) 
 			if (entities.get(i).remove)
-				entities.remove(i);
+				entities.remove(i).destroy();
 		
 		// Post update
 		for(Entity e : entities) e.postupdate(delta);

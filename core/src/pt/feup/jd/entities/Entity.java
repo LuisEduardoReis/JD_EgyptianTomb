@@ -252,5 +252,6 @@ public class Entity {
 		return false;
 	}
 
+	public void destroy() {}
 	
 }

@@ -30,7 +30,11 @@
   </data>
  </layer>
  <objectgroup name="objects">
-  <object id="18" type="enemy-snake" gid="289" x="320" y="576" width="64" height="64"/>
+  <object id="18" type="enemy-snake" gid="289" x="320" y="576" width="64" height="64">
+   <properties>
+    <property name="range" value="-1"/>
+   </properties>
+  </object>
   <object id="26" name="door1" type="door" x="128" y="128" width="64" height="64">
    <properties>
     <property name="targetSpawn" value="door3"/>

@@ -50,11 +50,16 @@ public class Coin extends Entity {
 				vy = 3*JDGame.TILE_SIZE * (level.player.y - y) / d;
 			}
 			if (d < 8) {
-				level.game.addCoins(1);
 				remove = true;
 			}
 		}
 		
 		super.update(delta);
+	}
+	
+	@Override
+	public void destroy() {
+		level.game.addCoins(1);
+		super.destroy();
 	}
 }

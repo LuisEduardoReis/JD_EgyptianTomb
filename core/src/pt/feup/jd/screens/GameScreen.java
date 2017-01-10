@@ -61,6 +61,9 @@ public class GameScreen extends ScreenAdapter {
 	FrameBuffer fbo;
 	
 	FadeEffect fadeIn, fadeOut;
+	
+	// Shop
+	ShopSubScreen shop;
 
 	
 	@Override
@@ -94,6 +97,8 @@ public class GameScreen extends ScreenAdapter {
 		defaultShader = new ShaderProgram(Assets.vertexShader, Assets.defaultFragmentShader);
 		shader = new ShaderProgram(Assets.vertexShader, Assets.fragmentShader);
 		
+		// Shop
+		shop = null;
 				
 		// Start
 		gotoLevel("testing", null);
@@ -222,6 +227,7 @@ public class GameScreen extends ScreenAdapter {
 			// Coins
 			if (coins > 0) {
 				batch.draw(Assets.sprites32[5][0], -16, sh-64-16, 64,64);
+				font.getData().setScale(1.5f);
 				layout.setText(font, ""+coins); 
 				font.draw(batch, layout, 32, sh-64 + 1.5f*layout.height);
 			}
@@ -262,12 +268,15 @@ public class GameScreen extends ScreenAdapter {
 			batch.setColor(1,1,1,1);
 			
 		batch.end();
+		
+		// Shop	
+		if (shop != null) shop.render(delta);
 	
 	}
 
 	private void logic(float delta) {
 		// Logic
-		if (levelChangeTimer < 0) {
+		if (levelChangeTimer < 0 && shop == null) {
 		
 			if(accum > tickdelay) {
 				showDoorTooltip = false;
@@ -282,7 +291,8 @@ public class GameScreen extends ScreenAdapter {
 				fadeOut.start();
 			}
 			
-		} else {
+		} 
+		if (levelChangeTimer >= 0) {
 			levelChangeTimer = Util.stepTo(levelChangeTimer, 0, delta);
 			if (levelChangeTimer == 0) {
 				levelChangeTimer = -1;
@@ -294,6 +304,7 @@ public class GameScreen extends ScreenAdapter {
 		fadeIn.update(delta);
 		fadeOut.update(delta);
 		
+		if (Gdx.input.isKeyJustPressed(Input.Keys.S)) shop = (shop == null) ? new ShopSubScreen(this) : null;
 		
 		if (Gdx.input.isKeyJustPressed(Input.Keys.D)) JDGame.DEBUG ^= true;
 	}
