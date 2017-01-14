@@ -21,6 +21,7 @@ import pt.feup.jd.JDGame;
 import pt.feup.jd.Util;
 import pt.feup.jd.entities.Enemy;
 import pt.feup.jd.entities.Entity;
+import pt.feup.jd.entities.Mummy;
 import pt.feup.jd.entities.Player;
 import pt.feup.jd.entities.Snake;
 import pt.feup.jd.levels.tileentities.FireballTrap;
@@ -122,6 +123,7 @@ public class Level {
 		if (objects != null) {
 			for(MapObject o : objects){
 				String type = (String) o.getProperties().get("type");
+				if (type == null) continue;
 				Vector2 p = Util.getMapObjectPosition(o);
 				MapProperties prop = o.getProperties();
 				
@@ -174,6 +176,8 @@ public class Level {
 					Enemy e = null;
 					// Snake
 					if (type.equals("enemy-snake")) e = (Snake) new Snake(this).moveTo(p.x,p.y);
+					// Snake
+					if (type.equals("enemy-mummy")) e = (Mummy) new Mummy(this).moveTo(p.x,p.y);
 					
 					
 					// Common Properties

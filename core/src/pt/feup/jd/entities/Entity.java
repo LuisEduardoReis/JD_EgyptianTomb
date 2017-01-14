@@ -179,7 +179,7 @@ public class Entity {
 			for(int yi = minYi; yi <= maxYi; yi++) {
 			for(int xi = minXi; xi <= maxXi; xi++) {
 				Tile t = level.getTile(xi, yi);
-				if (!t.solid) continue;
+				if (!checkSolid(t)) continue;
 				
 				float nr = Collision.sweepAABB(
 						px-hx/2, py-hy/2, hx, hy, 
@@ -217,6 +217,10 @@ public class Entity {
 		
 	}
 	
+	public boolean checkSolid(Tile t) {
+		return t.solid;
+	}
+
 	public void levelCollision(float nx, float ny, Tile t) {		
 		if (t == Tile.SPIKE) damage(health);
 	}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="8" tilewidth="64" tileheight="64" nextobjectid="59">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="8" tilewidth="64" tileheight="64" nextobjectid="64">
  <tileset firstgid="1" name="tilesheet" tilewidth="64" tileheight="64" tilecount="256">
   <image source="../tilesheet.png" width="1024" height="1024"/>
   <tile id="0">
@@ -16,7 +16,7 @@
  <tileset firstgid="257" name="spritesheet" tilewidth="64" tileheight="64" tilecount="64">
   <image source="../spritesheet.png" width="512" height="512"/>
  </tileset>
- <layer name="background" width="16" height="8">
+ <layer name="background" width="16" height="8" opacity="0.9">
   <data encoding="base64">
    NAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA=
   </data>
@@ -39,5 +39,9 @@
   <object id="54" name="shop1" type="shop-health" x="256" y="384" width="64" height="64"/>
   <object id="56" name="shop2" type="shop-shotgun" x="384" y="384" width="64" height="64"/>
   <object id="57" name="shop3" type="shop-hammer" x="768" y="384" width="64" height="64"/>
+  <object id="59" type="torch" gid="276" x="256" y="384" width="64" height="64"/>
+  <object id="61" type="torch" gid="276" x="384" y="384" width="64" height="64"/>
+  <object id="62" type="torch" gid="276" x="640" y="384" width="64" height="64"/>
+  <object id="63" type="torch" gid="276" x="768" y="384" width="64" height="64"/>
  </objectgroup>
 </map>

@@ -7,9 +7,7 @@ import pt.feup.jd.levels.Tile;
 
 public class Enemy extends Entity{
 	
-	boolean turnOnBump;
-	boolean turnOnEdge;
-		boolean turning;
+	boolean followPlayer;
 	
 	float walkSpeed;
 	float walkDirection;
@@ -27,8 +25,8 @@ public class Enemy extends Entity{
 		walkSpeed = 0;
 		walkDirection = 1;
 		
-		turnOnBump = false;
-		turnOnEdge = false;
+
+		followPlayer = false;
 		
 		contactDamage = 0;
 		contactDamage_timer = 0;
@@ -43,21 +41,10 @@ public class Enemy extends Entity{
 	public void update(float delta) {
 		super.update(delta);	
 		
-		if (level.player != null && Util.pointDistance(level.player, this) < range)
-			inRange_timer = inRange_delay;
-		
-		if (range < 0 || inRange_timer > 0) {
-			vx = walkSpeed * direction;
-			
-			if (onGround()) turning = false;
-			else if (turnOnEdge && !turning){
-				turning = true;
-				direction = -direction;
-			}
-		} else
-			vx = 0;
-		
+		if (level.player != null && Util.pointDistance(level.player, this) < range)	inRange_timer = inRange_delay;		
 		inRange_timer = Util.stepTo(inRange_timer, 0, delta);
+		
+		
 		contactDamage_timer = Util.stepTo(contactDamage_timer, 0, delta);
 	}
 	
@@ -79,12 +66,19 @@ public class Enemy extends Entity{
 	}
 	
 	@Override
-	public void levelCollision(float nx, float ny, Tile t) {
-		super.levelCollision(nx, ny, t);
-		
-		if (nx != 0 && turnOnBump) { 
-			direction = -direction; 
-		}
+	public boolean checkSolid(Tile t) {
+		return super.checkSolid(t) || t == Tile.LADDER;
 	}
 	
+	
+	@Override
+	public void die() {
+		super.die();
+
+		for(int i = 0; i < 3; i++) {
+			Coin coin = (Coin) new Coin(level).moveTo(x,y);
+			coin.vy = Util.randomRange(2*JDGame.TILE_SIZE, 4*JDGame.TILE_SIZE);
+			coin.vx = Util.randomRange(-JDGame.TILE_SIZE, JDGame.TILE_SIZE);
+		}
+	}
 }

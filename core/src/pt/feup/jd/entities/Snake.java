@@ -1,10 +1,9 @@
 package pt.feup.jd.entities;
 
 import pt.feup.jd.Assets;
-import pt.feup.jd.JDGame;
 import pt.feup.jd.Sprite;
-import pt.feup.jd.Util;
 import pt.feup.jd.levels.Level;
+import pt.feup.jd.levels.Tile;
 
 public class Snake extends Enemy {
 
@@ -20,6 +19,10 @@ public class Snake extends Enemy {
 		default_anim.addFrame(Assets.sprites64[4][3]);
 	}
 	
+	boolean turnOnBump;
+	boolean turnOnEdge;
+		boolean turning;
+
 	
 	public Snake(Level level) {
 		super(level);
@@ -28,7 +31,7 @@ public class Snake extends Enemy {
 		
 		sprite = default_anim;
 		
-		hx = 48;
+		hx = 32;
 		hy = 48;
 		
 		vx = 32;
@@ -41,14 +44,28 @@ public class Snake extends Enemy {
 	}
 	
 	@Override
-	public void die() {
-		super.die();
-
-		for(int i = 0; i < 3; i++) {
-			Coin coin = (Coin) new Coin(level).moveTo(x,y);
-			coin.vy = Util.randomRange(2*JDGame.TILE_SIZE, 4*JDGame.TILE_SIZE);
-			coin.vx = Util.randomRange(-JDGame.TILE_SIZE, JDGame.TILE_SIZE);
+	public void update(float delta) {
+		super.update(delta);
+		
+		if (range < 0 || inRange_timer > 0) {
+			vx = walkSpeed * direction;
+			
+			if (onGround()) turning = false;
+			else if (turnOnEdge && !turning){
+				turning = true;
+				direction = -direction;
+			}
+		} else
+			vx = 0;
+	}
+	
+	@Override
+	public void levelCollision(float nx, float ny, Tile t) {
+		super.levelCollision(nx, ny, t);
+		
+		if (nx != 0 && turnOnBump) { 
+			direction = -direction; 
 		}
 	}
-
+	
 }
