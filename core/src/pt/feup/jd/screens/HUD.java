@@ -37,17 +37,17 @@ public class HUD {
 			
 			// Coins
 			if (game.coins > 0) {
-				batch.draw(Assets.sprites32[5][0], -16, sh-64-16, 64,64);
+				batch.draw(Assets.sprites32[5][0], -16, sh-64-8, 64,64);
 				font.getData().setScale(1.5f);
 				layout.setText(font, ""+game.coins); 
-				font.draw(batch, layout, 32, sh-64 + 1.5f*layout.height);
+				font.draw(batch, layout, 32, sh-64+4 + 1.5f*layout.height);
 			}
 			// Ammo
 			if (level.player.ammo > 0) {
-				batch.draw(Assets.sprites64[2][2], -16, sh-96, 64,64);
+				batch.draw(Assets.sprites64[2][2], -8, sh-96+8, 64,64);
 				font.getData().setScale(1.5f);
 				layout.setText(font, ""+level.player.ammo); 
-				font.draw(batch, layout, 48, sh-96 + 1.5f*layout.height);
+				font.draw(batch, layout, 52, sh-96+12 + 1.5f*layout.height);
 			}
 			// Timer
 			if (level.trapTimer != -1) {

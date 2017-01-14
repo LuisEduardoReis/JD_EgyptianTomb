@@ -156,6 +156,7 @@ public class Player extends Entity {
 			Bullet b = (Bullet) new Bullet(level).moveTo(x + direction*28, y-10);
 			float s = 7.5f*JDGame.TILE_SIZE;
 			b.vx = direction * s;
+			b.scale_x = direction;
 			
 			gun_timer = gun_delay;
 			ammo--;

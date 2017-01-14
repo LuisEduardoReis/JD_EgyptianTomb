@@ -9,6 +9,8 @@ import pt.feup.jd.levels.Level;
 
 public class TileEntity {
 
+	static int idCount;
+	
 	protected Level level;
 	public String name;
 	protected float x,y;
@@ -18,7 +20,7 @@ public class TileEntity {
 	
 	public TileEntity(Level level, String name, float x, float y) {
 		this.level = level;
-		this.name = name;
+		this.name = (name == null || name.equals("")) ? "default_"+(idCount++) : name;
 		this.x = x;
 		this.y = y;
 		this.xi = (int) (x / JDGame.TILE_SIZE);
@@ -41,5 +43,8 @@ public class TileEntity {
 			a.translate(-JDGame.TILE_SIZE/2, -JDGame.TILE_SIZE/2);
 			batch.draw(sprite, JDGame.TILE_SIZE, JDGame.TILE_SIZE, a);
 		}
+	}
+	
+	public void renderLight(SpriteBatch batch) {
 	}
 }

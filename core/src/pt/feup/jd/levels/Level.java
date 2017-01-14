@@ -27,6 +27,7 @@ import pt.feup.jd.levels.tileentities.FireballTrap;
 import pt.feup.jd.levels.tileentities.Gate;
 import pt.feup.jd.levels.tileentities.Lever;
 import pt.feup.jd.levels.tileentities.TileEntity;
+import pt.feup.jd.levels.tileentities.Torch;
 import pt.feup.jd.levels.tileentities.shop.AmmoPack;
 import pt.feup.jd.levels.tileentities.shop.HealthPack;
 import pt.feup.jd.levels.triggers.Door;
@@ -163,6 +164,11 @@ public class Level {
 					if (prop.containsKey("trigger")) trap.trigger =  ((String) prop.get("trigger"));
 					tileEntities.put(trap.name, trap);
 				}
+				// Torch
+				else if (type.equals("torch")) {
+					Torch torch = new Torch(this, o.getName(), p.x,p.y);
+					tileEntities.put(torch.name, torch);
+				}
 				// Enemies
 				else if (type.startsWith("enemy-")) {
 					Enemy e = null;
@@ -179,7 +185,6 @@ public class Level {
 				else if (type.startsWith("shop-")) {
 					// Health Pack
 					if (type.equals("shop-health")) {
-						System.out.println("oi");
 						HealthPack healthShop = new HealthPack(this, o.getName(), p.x, p.y);
 						tileEntities.put(healthShop.name, healthShop);
 						triggers.put(healthShop.name, healthShop);
@@ -324,6 +329,7 @@ public class Level {
 	}
 
 	public void renderLight(SpriteBatch batch) {
+		for(TileEntity e : tileEntities.values()) e.renderLight(batch);
 		for(Entity e : entities) e.renderLight(batch);		
 	}
 
