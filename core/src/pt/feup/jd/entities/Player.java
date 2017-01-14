@@ -29,7 +29,9 @@ public class Player extends Entity {
 		initSprites = true;
 		
 		idle_anim = new Sprite();
-		idle_anim.addFrame(Assets.sprites64[1][0]);
+		idle_anim.anim_delay = 1/3f;
+		idle_anim.addFrame(Assets.sprites64[1][6]);
+		idle_anim.addFrame(Assets.sprites64[1][7]);
 		
 		walk_anim = new Sprite();
 		walk_anim.anim_delay = 1/8f;
@@ -163,6 +165,15 @@ public class Player extends Entity {
 		}
 		if (vx != 0 && onGround) gun_sway += delta;
 		
+	}
+	
+	public void entityCollision(Entity o) {
+		
+		if (o instanceof BallOfMagic) {
+			damage(((BallOfMagic) o).damage);
+			o.remove = true;
+		}
+
 	}
 	
 	@Override

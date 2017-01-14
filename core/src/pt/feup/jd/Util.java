@@ -14,6 +14,7 @@ public class Util {
 
 	public static Random random = new Random();
 	public static float degToRad = (float) (Math.PI / 180);
+	public static float radToDeg = (float) (180 / Math.PI);
 	
 	
 	public static boolean between(float x, float a, float b) {
@@ -66,5 +67,9 @@ public class Util {
 
 	public static float pointDistance(Entity a, Entity b) {
 		return Util.pointDistance(a.x,a.y,b.x,b.y);
+	}
+
+	public static float pointDirection(float x, float y, float x2, float y2) {
+		return (float) Math.atan2(y2-y,x2-x)*radToDeg;
 	}
 }

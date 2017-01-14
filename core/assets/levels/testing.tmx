@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" nextobjectid="59">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" nextobjectid="60">
  <tileset firstgid="1" name="tilesheet" tilewidth="64" tileheight="64" tilecount="256">
   <image source="../tilesheet.png" width="1024" height="1024"/>
   <tile id="0">
@@ -65,7 +65,11 @@
   </object>
   <object id="52" name="fireballtraptrigger1" type="trigger" x="576" y="320" width="128" height="64"/>
   <object id="53" type="torch" gid="276" x="576" y="320" width="64" height="64"/>
-  <object id="57" type="enemy-mummy" gid="293" x="256" y="576" width="64" height="64"/>
   <object id="58" type="enemy-mummy" gid="293" x="384" y="320" width="64" height="64"/>
+  <object id="59" type="enemy-pharaoh" gid="303" x="64" y="576" width="64" height="64">
+   <properties>
+    <property name="range" value="-1"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

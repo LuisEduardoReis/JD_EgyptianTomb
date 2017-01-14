@@ -22,6 +22,7 @@ import pt.feup.jd.Util;
 import pt.feup.jd.entities.Enemy;
 import pt.feup.jd.entities.Entity;
 import pt.feup.jd.entities.Mummy;
+import pt.feup.jd.entities.Pharaoh;
 import pt.feup.jd.entities.Player;
 import pt.feup.jd.entities.Snake;
 import pt.feup.jd.levels.tileentities.FireballTrap;
@@ -176,9 +177,11 @@ public class Level {
 					Enemy e = null;
 					// Snake
 					if (type.equals("enemy-snake")) e = (Snake) new Snake(this).moveTo(p.x,p.y);
-					// Snake
+					// Mummy
 					if (type.equals("enemy-mummy")) e = (Mummy) new Mummy(this).moveTo(p.x,p.y);
-					
+					// Pharaoh
+					if (type.equals("enemy-pharaoh")) e = (Pharaoh) new Pharaoh(this).moveTo(p.x,p.y);
+
 					
 					// Common Properties
 					if (e != null) {

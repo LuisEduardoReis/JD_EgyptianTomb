@@ -18,6 +18,7 @@ public class Enemy extends Entity{
 	public float range;
 	float inRange_timer, inRange_delay;
 
+	float distanceToPlayer;
 	
 	public Enemy(Level level) {
 		super(level);
@@ -41,7 +42,9 @@ public class Enemy extends Entity{
 	public void update(float delta) {
 		super.update(delta);	
 		
-		if (level.player != null && Util.pointDistance(level.player, this) < range)	inRange_timer = inRange_delay;		
+		distanceToPlayer = Util.pointDistance(level.player, this);
+		
+		if (level.player != null &&  distanceToPlayer < range)	inRange_timer = inRange_delay;		
 		inRange_timer = Util.stepTo(inRange_timer, 0, delta);
 		
 		

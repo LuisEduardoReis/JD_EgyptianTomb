@@ -231,7 +231,7 @@ public class Entity {
 			damage(((Fireball) o).damage);
 			o.remove = true;
 		}
-		
+
 	}
 	
 	public Entity moveTo(float x, float y) {

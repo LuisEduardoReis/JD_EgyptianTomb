@@ -16,6 +16,7 @@ public class Mummy extends Enemy {
 		default_anim.addFrame(Assets.sprites64[4][4]);
 		default_anim.addFrame(Assets.sprites64[4][5]);
 		default_anim.addFrame(Assets.sprites64[4][6]);
+		default_anim.addFrame(Assets.sprites64[4][5]);
 	}
 	
 	float follow_timer, follow_delay;
