@@ -3,6 +3,7 @@ package pt.feup.jd.entities;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import pt.feup.jd.Assets;
+import pt.feup.jd.JDGame;
 import pt.feup.jd.Sprite;
 import pt.feup.jd.Util;
 import pt.feup.jd.levels.Level;
@@ -34,7 +35,7 @@ public class Fireball extends Entity {
 		
 		applyGravity = false;
 		
-		damage = 25f;
+		damage = Float.parseFloat(JDGame.getDifficultyProperty("FIREBALL_DAMAGE", level.game.difficulty,"25.0"));
 	}
 
 		

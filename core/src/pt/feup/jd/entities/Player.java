@@ -13,11 +13,6 @@ import pt.feup.jd.levels.Tile;
 
 public class Player extends Entity {
 	
-	public static final float MOVE_SPEED = 5*JDGame.TILE_SIZE;
-	public static final float JUMP_SPEED = (float) Math.sqrt(2*Entity.GRAVITY*2.5*JDGame.TILE_SIZE);
-	public static final float LADDER_SPEED = 4*JDGame.TILE_SIZE;
-	public static final int MAX_AMMO = 100;
-	
 	static Sprite idle_anim;
 	static Sprite walk_anim;
 	static Sprite jump_anim;
@@ -60,27 +55,40 @@ public class Player extends Entity {
 	float gun_delay, gun_timer, gun_sway;
 	boolean can_shoot;
 	
+	public float move_speed;
+	public float jump_speed;
+	public float ladder_speed;
+	public int max_ammo;
+	
 	public Player(Level level) {
 		super(level);
+		
+		if (!initSprites) initSprites();
 		
 		x = 0;
 		y = 0;
 		
-		if (!initSprites) initSprites();
+		health = Float.parseFloat(JDGame.getDifficultyProperty("PLAYER_STARTING_HEALTH", level.game.difficulty,"100"));
+		max_health = Float.parseFloat(JDGame.getDifficultyProperty("PLAYER_MAX_HEALTH", level.game.difficulty,"100"));
+		
+		move_speed = Float.parseFloat(JDGame.getGlobalProperty("PLAYER_MOVE_SPEED", 5*JDGame.TILE_SIZE+""));
+		jump_speed = Float.parseFloat(JDGame.getGlobalProperty("PLAYER_JUMP_SPEED", Math.sqrt(2*15*2.5)*JDGame.TILE_SIZE+""));
+		ladder_speed = Float.parseFloat(JDGame.getGlobalProperty("PLAYER_LADDER_SPEED", 4*JDGame.TILE_SIZE+""));
+		max_ammo = Integer.parseInt(JDGame.getGlobalProperty("PLAYER_MAX_AMMO", "100"));		
 		
 		hx = 24;
 		hy = 52;		
 		
-		jumpWindowDelay = 0.25f;
+		jumpWindowDelay = Float.parseFloat(JDGame.getGlobalProperty("PLAYER_JUMP_WINDOW_DELAY", "0.25"));
 		
 		setSprite(idle_anim);
 		
 		gun_timer = 0;
-		gun_delay = 0.25f;
+		gun_delay = 1f/Float.parseFloat(JDGame.getGlobalProperty("PLAYER_BULLETS_PER_SECOND", "4"));
 		gun_sway = 0;
 		can_shoot = true;
 		
-		ammo = 10;
+		ammo = Integer.parseInt(JDGame.getGlobalProperty("PLAYER_STARTING_AMMO", "10"));
 	}
 	
 	@Override
@@ -102,12 +110,12 @@ public class Player extends Entity {
 		// Movement
 		if (!dead) {
 			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.LEFT))) {
-				vx = -MOVE_SPEED;
+				vx = -move_speed;
 				direction = -1;
 				setSprite(walk_anim);
 			}
 			else if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.RIGHT))) {
-				vx = MOVE_SPEED;
+				vx = move_speed;
 				direction = 1;
 				setSprite(walk_anim);
 			}
@@ -126,7 +134,7 @@ public class Player extends Entity {
 			jumpWindow = Util.stepTo(jumpWindow,0,delta);
 			
 			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && jumpWindow>0 && !jumped) {
-				vy = JUMP_SPEED;
+				vy = jump_speed;
 				jumped = true;
 			}
 			
@@ -137,10 +145,10 @@ public class Player extends Entity {
 					can_shoot = false;
 				}
 				if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) {
-					vy = LADDER_SPEED;
+					vy = ladder_speed;
 				} else
 				if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.DOWN))) {
-					vy = -LADDER_SPEED;
+					vy = -ladder_speed;
 				} else {
 					vy = 0;
 				}
@@ -168,6 +176,7 @@ public class Player extends Entity {
 	}
 	
 	public void entityCollision(Entity o) {
+		super.entityCollision(o);
 		
 		if (o instanceof BallOfMagic) {
 			damage(((BallOfMagic) o).damage);

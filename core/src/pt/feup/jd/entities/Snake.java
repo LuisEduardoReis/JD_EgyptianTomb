@@ -1,6 +1,7 @@
 package pt.feup.jd.entities;
 
 import pt.feup.jd.Assets;
+import pt.feup.jd.JDGame;
 import pt.feup.jd.Sprite;
 import pt.feup.jd.levels.Level;
 import pt.feup.jd.levels.Tile;
@@ -29,6 +30,8 @@ public class Snake extends Enemy {
 		
 		if (!initSprites) initSprites();
 		
+		health = max_health = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_HEALTH", level.game.difficulty,"100"));
+		
 		sprite = default_anim;
 		
 		hx = 32;
@@ -36,11 +39,15 @@ public class Snake extends Enemy {
 		
 		vx = 32;
 		
-		walkSpeed = 64;
+		walkSpeed = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_WALKSPEED", level.game.difficulty,"64"));
+		
 		turnOnBump = true;
 		turnOnEdge = true;
 		
-		contactDamage = 25;
+		contactDamage = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_CONTACT_DAMAGE", level.game.difficulty,"25"));
+		contactDamage_delay = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_CONTACT_DAMAGE_DELAY", level.game.difficulty,"1.0"));
+		
+		coinLoot = Integer.parseInt(JDGame.getDifficultyProperty("ENEMY_SNAKE_COIN_LOOT", level.game.difficulty,"3"));
 	}
 	
 	@Override

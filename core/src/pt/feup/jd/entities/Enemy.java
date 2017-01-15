@@ -20,6 +20,8 @@ public class Enemy extends Entity{
 
 	float distanceToPlayer;
 	
+	int coinLoot;
+	
 	public Enemy(Level level) {
 		super(level);
 		
@@ -36,6 +38,8 @@ public class Enemy extends Entity{
 		range = 3.5f*JDGame.TILE_SIZE;
 		inRange_timer = 0;
 		inRange_delay = 2.5f;
+		
+		coinLoot = 0;
 	}
 	
 	@Override
@@ -78,7 +82,7 @@ public class Enemy extends Entity{
 	public void die() {
 		super.die();
 
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; i < coinLoot; i++) {
 			Coin coin = (Coin) new Coin(level).moveTo(x,y);
 			coin.vy = Util.randomRange(2*JDGame.TILE_SIZE, 4*JDGame.TILE_SIZE);
 			coin.vx = Util.randomRange(-JDGame.TILE_SIZE, JDGame.TILE_SIZE);

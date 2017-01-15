@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 import pt.feup.jd.JDGame;
-import pt.feup.jd.entities.Player;
 import pt.feup.jd.levels.Level;
 import pt.feup.jd.levels.tileentities.TileEntity;
 import pt.feup.jd.levels.triggers.Trigger;
@@ -22,7 +21,7 @@ public class AmmoPack extends TileEntity implements Trigger {
 	
 	@Override
 	public void collide() {
-		if (level.player.ammo < Player.MAX_AMMO) {
+		if (level.player.ammo < level.player.max_ammo) {
 			if (level.game.coins >= cost) {
 				level.game.tooltip = "Press " + Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.USE)) + " to buy "+ammount+" bullets for " + cost + " coin"+((cost>1)?"s":"");
 				

@@ -3,6 +3,7 @@ package pt.feup.jd.entities;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import pt.feup.jd.Assets;
+import pt.feup.jd.JDGame;
 import pt.feup.jd.Sprite;
 import pt.feup.jd.Util;
 import pt.feup.jd.levels.Level;
@@ -33,7 +34,7 @@ public class Bullet extends Entity {
 		hx = 4;
 		hy = 4;
 		
-		damage = 50;
+		damage = Float.parseFloat(JDGame.getDifficultyProperty("BULLET_DAMAGE", level.game.difficulty,"50.0"));
 	}
 	
 	@Override

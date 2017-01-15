@@ -14,8 +14,6 @@ import pt.feup.jd.levels.Tile;
 
 public class Entity {
 	
-	public static final float GRAVITY = 15*JDGame.TILE_SIZE;
-
 	public Level level;
 	
 	public float x,y;
@@ -37,14 +35,15 @@ public class Entity {
 	public float offset_x, offset_y;
 	public float scale_x, scale_y;
 	
-	public float health;
+	public float health, max_health;
 	public float damage_anim_timer, damage_anim_delay;
 	public boolean dead;
 	
 	public boolean remove = true;
 	
 	public float t;
-
+	
+	public float gravity;
 	
 	
 	public Entity(Level level) {
@@ -58,6 +57,8 @@ public class Entity {
 		bounciness=0; 
 		applyGravity=true;
 		
+		gravity = Float.parseFloat(JDGame.getGlobalProperty("GRAVITY", 15*JDGame.TILE_SIZE+""));
+		
 		visible = true;
 		
 		anim_timer = 0;
@@ -66,7 +67,7 @@ public class Entity {
 		
 		direction = 1;
 		
-		health = 100;
+		health = max_health = 100;
 		damage_anim_timer = 0;
 		damage_anim_delay = 1;
 		remove = false;
@@ -86,7 +87,7 @@ public class Entity {
 	}
 	public void update(float delta) {
 		// Logic
-		if (applyGravity) vy-=GRAVITY*delta;
+		if (applyGravity) vy-=gravity*delta;
 		
 		if (health <= 0 && !dead) die(); 
 		
@@ -116,7 +117,7 @@ public class Entity {
 	}
 	public void heal(float heal) {
 		if (dead) return;
-		health = Util.stepTo(health, 100, heal);
+		health = Util.stepTo(health, max_health, heal);
 	}
 	
 	public void die() {

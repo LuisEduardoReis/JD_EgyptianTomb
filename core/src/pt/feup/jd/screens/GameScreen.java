@@ -22,14 +22,18 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import pt.feup.jd.Assets;
 import pt.feup.jd.FadeEffect;
 import pt.feup.jd.JDGame;
+import pt.feup.jd.JDGame.Difficulty;
 import pt.feup.jd.Util;
 import pt.feup.jd.entities.Player;
 import pt.feup.jd.levels.Level;
 
 public class GameScreen extends ScreenAdapter {
-	JDGame game;
-	public GameScreen(JDGame game) {
+	public final JDGame game;
+	public final Difficulty difficulty;
+	
+	public GameScreen(JDGame game, Difficulty difficulty) {
 		this.game = game;
+		this.difficulty = difficulty;
 	}
 	
 	// Logic
