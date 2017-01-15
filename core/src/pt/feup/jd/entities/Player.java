@@ -3,13 +3,17 @@ package pt.feup.jd.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import pt.feup.jd.Assets;
 import pt.feup.jd.JDGame;
 import pt.feup.jd.Sprite;
 import pt.feup.jd.Util;
+import pt.feup.jd.levels.Collision;
 import pt.feup.jd.levels.Level;
 import pt.feup.jd.levels.Tile;
+import pt.feup.jd.levels.tileentities.BrokenBlock;
+import pt.feup.jd.levels.tileentities.TileEntity;
 
 public class Player extends Entity {
 	
@@ -60,6 +64,8 @@ public class Player extends Entity {
 	public float ladder_speed;
 	public int max_ammo;
 	
+	public int hammerHits;
+	
 	public Player(Level level) {
 		super(level);
 		
@@ -88,7 +94,8 @@ public class Player extends Entity {
 		gun_sway = 0;
 		can_shoot = true;
 		
-		ammo = Integer.parseInt(JDGame.getGlobalProperty("PLAYER_STARTING_AMMO", "10"));
+		ammo = Integer.parseInt(JDGame.getGlobalProperty("PLAYER_STARTING_AMMO", "10"));		
+		hammerHits = Integer.parseInt(JDGame.getGlobalProperty("PLAYER_STARTING_HAMMER", "4"));
 	}
 	
 	@Override
@@ -163,7 +170,7 @@ public class Player extends Entity {
 		// Weapon
 		gun_timer = Util.stepTo(gun_timer, 0, delta);
 		if (can_shoot && gun_timer == 0 && ammo > 0 && Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.FIRE))) {
-			Bullet b = (Bullet) new Bullet(level).moveTo(x + direction*28, y-10);
+			Bullet b = (Bullet) new Bullet(level).moveTo(x, y); b.x += direction*28; b.y -= 10;
 			float s = 7.5f*JDGame.TILE_SIZE;
 			b.vx = direction * s;
 			b.scale_x = direction;
@@ -173,6 +180,20 @@ public class Player extends Entity {
 		}
 		if (vx != 0 && onGround) gun_sway += delta;
 		
+		
+		// Hammer
+		if (hammerHits > 0 && Gdx.input.isKeyJustPressed(JDGame.keyBindings.get(JDGame.Keys.HAMMER))) {
+			for(TileEntity t : level.tileEntities.values()) {
+				if (!(t instanceof BrokenBlock)) continue;
+				BrokenBlock b = (BrokenBlock) t;
+				
+				if(!b.open && Collision.aabbToaabb(x+(0.5f*hx*direction), y-hy/4, hx, hy/2, b.xi*JDGame.TILE_SIZE, b.yi*JDGame.TILE_SIZE, JDGame.TILE_SIZE, JDGame.TILE_SIZE)) {
+					hammerHits--;
+					b.open = true;
+					break;
+				};
+			}			
+		}
 	}
 	
 	public void entityCollision(Entity o) {
@@ -201,6 +222,16 @@ public class Player extends Entity {
 		}
 
 		super.render(batch);
+	}
+	
+	@Override
+	public void renderDebug(ShapeRenderer renderer) {
+		super.renderDebug(renderer);
+		
+		if (hammerHits > 0) {
+			renderer.setColor(Color.GREEN);
+			renderer.rect(x+(0.5f*hx*direction) - hx/2, y - hy/4, hx,hy/2);
+		}
 	}
 	
 	

@@ -11,11 +11,11 @@ public class TileEntity {
 
 	static int idCount;
 	
-	protected Level level;
+	public Level level;
 	public String name;
-	protected float x,y;
-	protected int xi, yi;
-	protected TextureRegion sprite;
+	public float x,y;
+	public int xi, yi;
+	public TextureRegion sprite;
 	public float rotation;
 	
 	public TileEntity(Level level, String name, float x, float y) {

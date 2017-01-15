@@ -1,5 +1,6 @@
 package pt.feup.jd.screens;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -48,6 +49,13 @@ public class HUD {
 				font.getData().setScale(1.5f);
 				layout.setText(font, ""+level.player.ammo); 
 				font.draw(batch, layout, 52, sh-96+12 + 1.5f*layout.height);
+			}
+			// Ammo
+			if (level.player.hammerHits > 0) {
+				batch.draw(Assets.sprites64[2][1], -8, sh-128+8, 64,64);
+				font.getData().setScale(1.5f);
+				layout.setText(font, ""+level.player.hammerHits); 
+				font.draw(batch, layout, 52, sh-128+12 + 1.5f*layout.height);
 			}
 			// Timer
 			if (level.trapTimer != -1) {

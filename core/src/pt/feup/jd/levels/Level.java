@@ -25,12 +25,14 @@ import pt.feup.jd.entities.Mummy;
 import pt.feup.jd.entities.Pharaoh;
 import pt.feup.jd.entities.Player;
 import pt.feup.jd.entities.Snake;
+import pt.feup.jd.levels.tileentities.BrokenBlock;
 import pt.feup.jd.levels.tileentities.FireballTrap;
 import pt.feup.jd.levels.tileentities.Gate;
 import pt.feup.jd.levels.tileentities.Lever;
 import pt.feup.jd.levels.tileentities.TileEntity;
 import pt.feup.jd.levels.tileentities.Torch;
 import pt.feup.jd.levels.tileentities.shop.AmmoPack;
+import pt.feup.jd.levels.tileentities.shop.HammerPile;
 import pt.feup.jd.levels.tileentities.shop.HealthPack;
 import pt.feup.jd.levels.triggers.Door;
 import pt.feup.jd.levels.triggers.Trigger;
@@ -158,6 +160,11 @@ public class Level {
 					tileEntities.put(lever.name, lever);
 					triggers.put(lever.name, lever);
 				}
+				// BrokenBlock
+				else if (type.equals("brokenblock")) {
+					BrokenBlock block = new BrokenBlock(this, o.getName(), p.x,p.y);
+					tileEntities.put(block.name, block);
+				}
 				// Fireball Trap
 				else if (type.equals("fireballtrap")) {
 					FireballTrap trap = new FireballTrap(this, o.getName(), p.x, p.y);
@@ -207,7 +214,16 @@ public class Level {
 						
 						if (prop.containsKey("cost")) ammoShop.cost = Integer.parseInt((String) prop.get("cost"));
 						if (prop.containsKey("ammount")) ammoShop.ammount = Integer.parseInt((String) prop.get("ammount"));
-					}	
+					}
+					// Hammer
+					if (type.equals("shop-hammer")) {
+						HammerPile hammerShop = new HammerPile(this, o.getName(), p.x, p.y);
+						tileEntities.put(hammerShop.name, hammerShop);
+						triggers.put(hammerShop.name, hammerShop);
+						
+						if (prop.containsKey("cost")) hammerShop.cost = Integer.parseInt((String) prop.get("cost"));
+						if (prop.containsKey("hits")) hammerShop.hits = Integer.parseInt((String) prop.get("hits"));
+					}
 				}
 			}
 		}
@@ -228,7 +244,7 @@ public class Level {
 		
 		// Triggers
 		if (player != null) { for(Trigger t : triggers.values()) {
-			if (Collision.aabbToaabb(player.x, player.y, player.hx, player.hy, t.getX(), t.getY(), t.getW(), t.getH())) {
+			if (Collision.aabbToaabb(player.x-player.hx/2, player.y-player.hy/2, player.hx, player.hy, t.getX(), t.getY(), t.getW(), t.getH())) {
 				t.collide();
 				t.setActive(true);
 			} else
