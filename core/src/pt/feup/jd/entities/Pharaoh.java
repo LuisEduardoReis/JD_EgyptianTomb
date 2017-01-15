@@ -54,6 +54,8 @@ public class Pharaoh extends Enemy {
 		
 		attack_timer = Util.stepTo(attack_timer, 0, delta);
 		
+		direction = level.player.x > x ? 1 : -1;
+		
 		if (range < 0 || inRange_timer > 0) {
 			sprite = active_anim;
 			Player p = level.player;

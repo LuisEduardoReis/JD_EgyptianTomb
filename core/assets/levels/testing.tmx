@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" nextobjectid="90">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" nextobjectid="91">
  <tileset firstgid="1" name="tilesheet" tilewidth="64" tileheight="64" tilecount="256">
   <image source="../tilesheet.png" width="1024" height="1024"/>
   <tile id="0">
@@ -47,7 +47,11 @@
     <property name="targetSpawn" value="door1"/>
    </properties>
   </object>
-  <object id="31" type="enemy-snake" gid="289" x="320" y="1216" width="64" height="64"/>
+  <object id="31" type="enemy-snake" gid="289" x="1088" y="1024" width="64" height="64">
+   <properties>
+    <property name="direction" value="-1"/>
+   </properties>
+  </object>
   <object id="37" name="gate1" type="gate" gid="299" x="704" y="384" width="64" height="64">
    <properties>
     <property name="inverted" value="true"/>
@@ -66,7 +70,7 @@
   <object id="52" name="fireballtraptrigger1" type="trigger" x="576" y="320" width="128" height="64"/>
   <object id="53" type="torch" gid="276" x="576" y="320" width="64" height="64"/>
   <object id="58" type="enemy-mummy" gid="293" x="384" y="320" width="64" height="64"/>
-  <object id="59" type="enemy-pharaoh" gid="303" x="64" y="576" width="64" height="64">
+  <object id="59" type="enemy-pharaoh" gid="303" x="512" y="512" width="64" height="64">
    <properties>
     <property name="range" value="-1"/>
    </properties>

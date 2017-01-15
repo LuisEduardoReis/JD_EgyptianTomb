@@ -203,7 +203,8 @@ public class Level {
 					
 					// Common Properties
 					if (e != null) {
-						if (o.getProperties().containsKey("range")) e.range = Float.parseFloat((String) o.getProperties().get("range"));
+						if (o.getProperties().containsKey("range")) e.range = Float.parseFloat((String) prop.get("range"));
+						if (o.getProperties().containsKey("direction")) e.direction = Integer.parseInt((String) prop.get("direction"));
 					}
 				}
 				// Shop
