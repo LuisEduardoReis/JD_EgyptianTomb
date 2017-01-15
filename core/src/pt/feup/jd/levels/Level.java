@@ -21,6 +21,7 @@ import pt.feup.jd.JDGame;
 import pt.feup.jd.Util;
 import pt.feup.jd.entities.Enemy;
 import pt.feup.jd.entities.Entity;
+import pt.feup.jd.entities.Jar;
 import pt.feup.jd.entities.Mummy;
 import pt.feup.jd.entities.Pharaoh;
 import pt.feup.jd.entities.Player;
@@ -178,6 +179,11 @@ public class Level {
 				else if (type.equals("torch")) {
 					Torch torch = new Torch(this, o.getName(), p.x,p.y);
 					tileEntities.put(torch.name, torch);
+				}
+				// Jar
+				else if (type.equals("jar")) {
+					Jar jar = (Jar) new Jar(this).moveTo(p.x, p.y);
+					if (prop.containsKey("content")) jar.content = Integer.parseInt((String) prop.get("content"));
 				}
 				// Enemies
 				else if (type.startsWith("enemy-")) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" nextobjectid="86">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" nextobjectid="90">
  <tileset firstgid="1" name="tilesheet" tilewidth="64" tileheight="64" tilecount="256">
   <image source="../tilesheet.png" width="1024" height="1024"/>
   <tile id="0">
@@ -95,5 +95,7 @@
   <object id="83" type="brokenblock" gid="308" x="1088" y="768" width="64" height="64"/>
   <object id="84" type="brokenblock" gid="308" x="896" y="640" width="64" height="64"/>
   <object id="85" type="brokenblock" gid="308" x="896" y="576" width="64" height="64"/>
+  <object id="88" type="jar" gid="279" x="704" y="640" width="64" height="64"/>
+  <object id="89" type="jar" gid="279" x="896" y="512" width="64" height="64"/>
  </objectgroup>
 </map>

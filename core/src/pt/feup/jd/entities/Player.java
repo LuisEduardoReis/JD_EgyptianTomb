@@ -1,6 +1,7 @@
 package pt.feup.jd.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -204,6 +205,13 @@ public class Player extends Entity {
 			o.remove = true;
 		}
 
+		if (o instanceof Jar) {
+			level.game.tooltip =  "Press " + Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.USE)) + " to break Jar";
+			
+			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.USE))) 
+				((Jar) o).remove = true;
+		}
+		
 	}
 	
 	@Override
