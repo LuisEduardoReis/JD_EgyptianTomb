@@ -23,7 +23,7 @@ public class Pharaoh extends Enemy {
 		active_anim.addFrame(Assets.sprites64[5][7]);
 	}
 	
-	float attack_damage;
+	float attack_damage, attack_speed;
 	float attack_timer, attack_delay;
 	
 	
@@ -40,6 +40,8 @@ public class Pharaoh extends Enemy {
 		hy = 48;
 			
 		attack_damage = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_PHARAOH_ATTACK_DAMAGE", level.game.difficulty,"25"));
+		attack_speed = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_PHARAOH_ATTACK_SPEED", level.game.difficulty,"192"));
+		
 		attack_timer = 0;
 		attack_delay = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_PHARAOH_ATTACK_DELAY", level.game.difficulty,"3.0"));
 		
@@ -58,9 +60,8 @@ public class Pharaoh extends Enemy {
 			if (attack_timer == 0 && p != null) {
 				BallOfMagic b = (BallOfMagic) new BallOfMagic(level).moveTo(x, y);
 				b.rotation = Util.pointDirection(x,y, p.x, p.y);
-				float s = 3f*JDGame.TILE_SIZE;
-				b.vx = s*(p.x-x)/distanceToPlayer;
-				b.vy = s*(p.y-y)/distanceToPlayer;
+				b.vx = attack_speed*(p.x-x)/distanceToPlayer;
+				b.vy = attack_speed*(p.y-y)/distanceToPlayer;
 				
 				attack_timer = attack_delay;
 			}

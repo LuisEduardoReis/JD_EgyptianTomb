@@ -36,6 +36,7 @@ import pt.feup.jd.levels.tileentities.shop.AmmoPack;
 import pt.feup.jd.levels.tileentities.shop.HammerPile;
 import pt.feup.jd.levels.tileentities.shop.HealthPack;
 import pt.feup.jd.levels.triggers.Door;
+import pt.feup.jd.levels.triggers.Sign;
 import pt.feup.jd.levels.triggers.Trigger;
 import pt.feup.jd.levels.triggers.TriggerAdapter;
 import pt.feup.jd.screens.GameScreen;
@@ -184,6 +185,10 @@ public class Level {
 				else if (type.equals("jar")) {
 					Jar jar = (Jar) new Jar(this).moveTo(p.x, p.y);
 					if (prop.containsKey("content")) jar.content = Integer.parseInt((String) prop.get("content"));
+				}
+				// Sign
+				else if (type.equals("sign")) {
+					triggers.put(o.getName(), new Sign(this, (RectangleMapObject) o));
 				}
 				// Enemies
 				else if (type.startsWith("enemy-")) {

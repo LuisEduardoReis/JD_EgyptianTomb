@@ -75,8 +75,8 @@ public class JDGame extends Game {
 	public void dispose() {
 		super.dispose();
 		
-		
-		/*try {
+		/*
+		try {
 			FileHandle file = Gdx.files.local("/properties/main.properties");
 			global_props.store(file.write(false), null);
 		} catch (IOException e) {
