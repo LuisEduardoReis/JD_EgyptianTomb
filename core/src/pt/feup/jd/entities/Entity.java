@@ -226,14 +226,7 @@ public class Entity {
 		if (t == Tile.SPIKE) damage(health);
 	}
 
-	public void entityCollision(Entity o) {
-		
-		if (o instanceof Fireball) {
-			damage(((Fireball) o).damage);
-			o.remove = true;
-		}
-
-	}
+	public void entityCollision(Entity o) {}
 	
 	public Entity moveTo(float x, float y) {
 		this.x = this.px = x;

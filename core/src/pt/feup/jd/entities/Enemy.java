@@ -63,6 +63,12 @@ public class Enemy extends Entity{
 			health -= ((Bullet) o).damage;
 			o.remove = true;
 		}
+		
+		if (o instanceof Fireball) {
+			damage(((Fireball) o).damage);
+			o.remove = true;
+		}
+		
 		else
 		if (o instanceof Player) {
 			if (contactDamage > 0 && contactDamage_timer == 0) {

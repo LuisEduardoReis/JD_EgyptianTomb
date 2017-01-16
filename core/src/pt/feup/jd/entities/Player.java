@@ -220,6 +220,11 @@ public class Player extends Entity {
 			damage(((BallOfMagic) o).damage);
 			o.remove = true;
 		}
+		
+		if (o instanceof Fireball) {
+			damage(((Fireball) o).damage);
+			o.remove = true;
+		}
 
 		if (o instanceof Jar) {
 			level.game.tooltip =  "Press " + Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.USE)) + " to break Jar";

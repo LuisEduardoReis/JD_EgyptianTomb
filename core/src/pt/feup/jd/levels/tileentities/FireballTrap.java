@@ -38,11 +38,10 @@ public class FireballTrap extends TileEntity {
 	@Override
 	public void update(float delta) {
 		super.update(delta);
-		
-		
+			
 		fireTimer = Util.stepTo(fireTimer, 0, delta);
 		if (fireTimer == 0 && (trigger == null || level.triggers.get(trigger).active())) {
-			Fireball b = (Fireball) new Fireball(level).moveTo(x, y);
+			Fireball b = (Fireball) new Fireball(level).moveTo(x + JDGame.TILE_SIZE/2, y + JDGame.TILE_SIZE/2);
 			b.rotation = rotation;
 			b.vx = (float) (fireSpeed * Math.cos(rotation * Util.degToRad));
 			b.vy = (float) (fireSpeed * Math.sin(rotation * Util.degToRad));

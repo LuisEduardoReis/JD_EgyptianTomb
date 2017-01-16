@@ -37,9 +37,7 @@ public class TileEntity {
 	public void render(SpriteBatch batch) {
 		if (sprite != null) {
 			a.idt();
-			a.translate(x - JDGame.TILE_SIZE/2,y - JDGame.TILE_SIZE/2);
-			a.translate(JDGame.TILE_SIZE/2, JDGame.TILE_SIZE/2);
-			a.rotate(rotation);
+			a.translate(x,y);			
 			batch.draw(sprite, JDGame.TILE_SIZE, JDGame.TILE_SIZE, a);
 		}
 	}
