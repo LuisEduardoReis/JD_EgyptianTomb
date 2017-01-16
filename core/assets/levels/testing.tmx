@@ -77,12 +77,10 @@
   </object>
   <object id="62" type="brokenblock" gid="308" x="1024" y="384" width="64" height="64"/>
   <object id="63" type="brokenblock" gid="308" x="1024" y="320" width="64" height="64"/>
-  <object id="64" type="brokenblock" gid="308" x="960" y="512" width="64" height="64"/>
   <object id="65" type="brokenblock" gid="308" x="1024" y="512" width="64" height="64"/>
   <object id="66" type="brokenblock" gid="308" x="1088" y="512" width="64" height="64"/>
   <object id="67" type="brokenblock" gid="308" x="1152" y="512" width="64" height="64"/>
   <object id="68" type="brokenblock" gid="308" x="1024" y="576" width="64" height="64"/>
-  <object id="69" type="brokenblock" gid="308" x="960" y="576" width="64" height="64"/>
   <object id="70" type="brokenblock" gid="308" x="1152" y="576" width="64" height="64"/>
   <object id="71" type="brokenblock" gid="308" x="1088" y="576" width="64" height="64"/>
   <object id="72" type="brokenblock" gid="308" x="1024" y="640" width="64" height="64"/>

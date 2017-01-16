@@ -310,14 +310,14 @@ public class Level {
 	public void renderDebug(ShapeRenderer shapeRenderer) {
 		for(Entity e : entities) e.renderDebug(shapeRenderer);
 		
-		shapeRenderer.setColor(Color.RED);
+		/*shapeRenderer.setColor(Color.RED);
 		for(int yy = 0; yy<map_height; yy++) {
 			for(int xx = 0; xx<map_width; xx++) {
 				if (!tiles[yy*map_width+xx].solid) continue;
 				
 				shapeRenderer.rect(xx*JDGame.TILE_SIZE, yy*JDGame.TILE_SIZE,JDGame.TILE_SIZE,JDGame.TILE_SIZE);
 			}
-		}
+		}*/
 		
 		shapeRenderer.setColor(Color.BLUE);
 		for(Trigger t : triggers.values()) {

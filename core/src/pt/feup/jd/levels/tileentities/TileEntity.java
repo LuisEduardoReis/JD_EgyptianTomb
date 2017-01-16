@@ -21,10 +21,10 @@ public class TileEntity {
 	public TileEntity(Level level, String name, float x, float y) {
 		this.level = level;
 		this.name = (name == null || name.equals("")) ? "default_"+(idCount++) : name;
-		this.x = x;
-		this.y = y;
 		this.xi = (int) (x / JDGame.TILE_SIZE);
 		this.yi = (int) (y / JDGame.TILE_SIZE);
+		this.x = xi * JDGame.TILE_SIZE;
+		this.y = yi * JDGame.TILE_SIZE;
 		
 		this.rotation = 0;
 	}
@@ -40,7 +40,6 @@ public class TileEntity {
 			a.translate(x - JDGame.TILE_SIZE/2,y - JDGame.TILE_SIZE/2);
 			a.translate(JDGame.TILE_SIZE/2, JDGame.TILE_SIZE/2);
 			a.rotate(rotation);
-			a.translate(-JDGame.TILE_SIZE/2, -JDGame.TILE_SIZE/2);
 			batch.draw(sprite, JDGame.TILE_SIZE, JDGame.TILE_SIZE, a);
 		}
 	}

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import pt.feup.jd.Assets;
 import pt.feup.jd.JDGame;
+import pt.feup.jd.JDGame.Keys;
 import pt.feup.jd.Sprite;
 import pt.feup.jd.Util;
 import pt.feup.jd.levels.Collision;
@@ -66,6 +67,7 @@ public class Player extends Entity {
 	public int max_ammo;
 	
 	public int hammerHits;
+	private float ham_x,ham_y,ham_w,ham_h;
 	
 	public Player(Level level) {
 		super(level);
@@ -183,12 +185,26 @@ public class Player extends Entity {
 		
 		
 		// Hammer
+		ham_w = hx;
+		ham_h = hy/2;
+		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(Keys.UP))) {
+			ham_x = x - hx/2;
+			ham_y = y + hy/4;
+		} else if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(Keys.DOWN))) {
+			ham_x = x - hx/2;
+			ham_y = y - hy/4 - hy/2;
+		} else {
+			ham_x = x + (0.5f*hx*direction) - hx/2;
+			ham_y = y - hy/4;
+		}
+		
+		
 		if (hammerHits > 0 && Gdx.input.isKeyJustPressed(JDGame.keyBindings.get(JDGame.Keys.HAMMER))) {
 			for(TileEntity t : level.tileEntities.values()) {
 				if (!(t instanceof BrokenBlock)) continue;
 				BrokenBlock b = (BrokenBlock) t;
 				
-				if(!b.open && Collision.aabbToaabb(x+(0.5f*hx*direction), y-hy/4, hx, hy/2, b.xi*JDGame.TILE_SIZE, b.yi*JDGame.TILE_SIZE, JDGame.TILE_SIZE, JDGame.TILE_SIZE)) {
+				if(!b.open && Collision.aabbToaabb(ham_x, ham_y, ham_w, ham_h, b.x, b.y, JDGame.TILE_SIZE, JDGame.TILE_SIZE)) {
 					hammerHits--;
 					b.open = true;
 					break;
@@ -237,8 +253,18 @@ public class Player extends Entity {
 		super.renderDebug(renderer);
 		
 		if (hammerHits > 0) {
+			/*for(TileEntity t : level.tileEntities.values()) {
+				if (!(t instanceof BrokenBlock)) continue;
+				BrokenBlock b = (BrokenBlock) t;
+				
+				if(Collision.aabbToaabb(x-hx/2, y - hy/4 + hy/2, hx,hy/2, b.x, b.y, JDGame.TILE_SIZE, JDGame.TILE_SIZE)) {
+					renderer.setColor(Color.GREEN);
+					renderer.rect(b.x, b.y, JDGame.TILE_SIZE, JDGame.TILE_SIZE);				
+				};
+			}*/	
+			
 			renderer.setColor(Color.GREEN);
-			renderer.rect(x+(0.5f*hx*direction) - hx/2, y - hy/4, hx,hy/2);
+			renderer.rect(ham_x, ham_y, ham_w, ham_h);
 		}
 	}
 	

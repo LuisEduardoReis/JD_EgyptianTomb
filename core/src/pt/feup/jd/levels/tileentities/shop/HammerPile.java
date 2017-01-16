@@ -38,9 +38,9 @@ public class HammerPile extends TileEntity implements Trigger {
 	
 	
 	@Override
-	public float getX() { return x - JDGame.TILE_SIZE/2; }
+	public float getX() { return x; }
 	@Override
-	public float getY() { return y - JDGame.TILE_SIZE/2; }
+	public float getY() { return y; }
 	@Override
 	public float getW() { return JDGame.TILE_SIZE; }
 	@Override
