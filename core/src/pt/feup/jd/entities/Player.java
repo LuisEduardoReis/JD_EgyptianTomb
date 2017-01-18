@@ -117,58 +117,58 @@ public class Player extends Entity {
 		
 		super.update(delta);
 		
-		// Movement
-		if (!dead) {
-			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.LEFT))) {
-				vx = -move_speed;
-				direction = -1;
-				setSprite(walk_anim);
-			}
-			else if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.RIGHT))) {
-				vx = move_speed;
-				direction = 1;
-				setSprite(walk_anim);
-			}
-			else {
-				setSprite(idle_anim);
-				vx = 0;
-			}
-			
-			if (onGround) {
-				jumpWindow = jumpWindowDelay;
-				jumped = false;
-			} else {
-				setSprite(jump_anim);
-			}
-			
-			jumpWindow = Util.stepTo(jumpWindow,0,delta);
-			
-			if (onLadder) {
-				if (!aboveLadder || headOnLadder || feetOnLadder) {
-					direction = (y % JDGame.TILE_SIZE) < JDGame.TILE_SIZE/2 ? 1 : -1;
-					setSprite(ladder_anim);
-					can_shoot = false;
-				}
-				if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) {
-					vy = ladder_speed;
-				} else
-				if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.DOWN))) {
-					vy = -ladder_speed;
-				} else {
-					vy = 0;
-				}
-			} else
-				if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && jumpWindow>0 && !jumped) {
-					Util.playSound(Util.random.nextBoolean() ? Assets.jump1 : Assets.jump2);
-					vy = jump_speed;
-					jumped = true;
-				}
-		} else {
+		if (dead) {
 			setSprite(dead_anim);
 			vx = 0;
+			return;
 		}
-			
-				
+		
+		// Movement
+		if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.LEFT))) {
+			vx = -move_speed;
+			direction = -1;
+			setSprite(walk_anim);
+		}
+		else if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.RIGHT))) {
+			vx = move_speed;
+			direction = 1;
+			setSprite(walk_anim);
+		}
+		else {
+			setSprite(idle_anim);
+			vx = 0;
+		}
+		
+		if (onGround) {
+			jumpWindow = jumpWindowDelay;
+			jumped = false;
+		} else {
+			setSprite(jump_anim);
+		}
+		
+		jumpWindow = Util.stepTo(jumpWindow,0,delta);
+		
+		if (onLadder) {
+			if (!aboveLadder || headOnLadder || feetOnLadder) {
+				direction = (y % JDGame.TILE_SIZE) < JDGame.TILE_SIZE/2 ? 1 : -1;
+				setSprite(ladder_anim);
+				can_shoot = false;
+			}
+			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP))) {
+				vy = ladder_speed;
+			} else
+			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.DOWN))) {
+				vy = -ladder_speed;
+			} else {
+				vy = 0;
+			}
+		} else
+			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && jumpWindow>0 && !jumped) {
+				Util.playSound(Util.random.nextBoolean() ? Assets.jump1 : Assets.jump2);
+				vy = jump_speed;
+				jumped = true;
+			}
+					
 		// Weapon
 		gun_timer = Util.stepTo(gun_timer, 0, delta);
 		if (can_shoot && gun_timer == 0 && ammo > 0 && Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.FIRE))) {
@@ -212,6 +212,7 @@ public class Player extends Entity {
 				};
 			}			
 		}
+		
 	}
 	
 	public void entityCollision(Entity o) {

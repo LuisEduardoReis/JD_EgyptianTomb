@@ -144,6 +144,7 @@ public class Level {
 				// Doors
 				else if (type.equals("door")) {
 					Door door = new Door(this, (RectangleMapObject) o);
+					if (prop.containsKey("onlyActiveWithTrap")) door.onlyActiveWithTrap = true;
 					spawns.put(door.name, p);
 					if (pd == null) pd = p;
 					triggers.put(door.name, door);
@@ -277,8 +278,10 @@ public class Level {
 		}
 		if (trapTimer == 0 && player != null) {
 			player.damage(player.health);
-			game.fadeOut();
 			trapTimer = -1;
+		}
+		if (player.dead) {
+			game.gameOver();
 		}
 		
 		// New entities
@@ -358,8 +361,7 @@ public class Level {
 
 	
 	public void destroy() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 
 	public void renderLight(SpriteBatch batch) {

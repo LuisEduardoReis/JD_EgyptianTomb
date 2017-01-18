@@ -13,10 +13,19 @@ public class Door extends TriggerAdapter {
 
 	public Door(Level level, RectangleMapObject o) {
 		super(level, o);
+		
+		onlyActiveWithTrap = false;
 	}
+	
+	public boolean onlyActiveWithTrap;
 
 	@Override
 	public void collide() {
+		if (onlyActiveWithTrap && level.trapTimer < 0) {
+			level.game.tooltip = "You must get the treasure before you exit";
+			return;
+		};
+			
 		if (targetLevel != null || targetSpawn != null)
 			level.game.tooltip = "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.USE))+" to open door.";
 		
