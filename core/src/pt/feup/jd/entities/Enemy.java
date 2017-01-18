@@ -60,12 +60,12 @@ public class Enemy extends Entity{
 		super.entityCollision(o);
 		
 		if (o instanceof Bullet) {
-			health -= ((Bullet) o).damage;
+			damage(((Bullet)o).damage);
 			o.remove = true;
 		}
 		
 		if (o instanceof Fireball) {
-			damage(((Fireball) o).damage);
+			damage(((Fireball)o).damage);
 			o.remove = true;
 		}
 		

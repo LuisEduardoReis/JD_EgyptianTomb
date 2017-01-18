@@ -1,6 +1,9 @@
 package pt.feup.jd;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -17,6 +20,17 @@ public class Assets {
 	public static String vertexShader;
 	public static String fragmentShader;
 	public static String defaultFragmentShader;
+	
+	public static Music music;
+	public static Sound gate_lever;
+	public static Sound gun_fire;
+	public static Sound hurt;
+	public static Sound jump1;
+	public static Sound jump2;
+	public static Sound open_door;
+	public static Sound pickup_coin;
+	public static Sound push;
+	public static Sound wall_break;
 	
 	public static void createAssets() {
 		
@@ -39,6 +53,19 @@ public class Assets {
 		vertexShader = new FileHandle("shaders/vertexShader.glsl").readString();
 		defaultFragmentShader = new FileHandle("shaders/defaultFragmentShader.glsl").readString();
 		fragmentShader =  new FileHandle("shaders/fragmentShader.glsl").readString();
+		
+		
+		music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music1.wav"));
+		music.setLooping(true);
+		gate_lever = Gdx.audio.newSound(Gdx.files.internal("sounds/gate_lever.wav"));
+		gun_fire = Gdx.audio.newSound(Gdx.files.internal("sounds/gun_fire.wav"));
+		hurt = Gdx.audio.newSound(Gdx.files.internal("sounds/hurt.wav"));
+		jump1 = Gdx.audio.newSound(Gdx.files.internal("sounds/jump1.wav"));
+		jump2 = Gdx.audio.newSound(Gdx.files.internal("sounds/jump2.wav"));
+		open_door = Gdx.audio.newSound(Gdx.files.internal("sounds/open_door.wav"));
+		pickup_coin = Gdx.audio.newSound(Gdx.files.internal("sounds/pickup_coin.wav"));
+		push = Gdx.audio.newSound(Gdx.files.internal("sounds/push.wav"));
+		wall_break = Gdx.audio.newSound(Gdx.files.internal("sounds/wall_break.wav"));
 		
 	}
 

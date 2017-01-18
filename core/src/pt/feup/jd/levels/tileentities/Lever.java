@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import pt.feup.jd.Assets;
 import pt.feup.jd.JDGame;
+import pt.feup.jd.Util;
 import pt.feup.jd.levels.Level;
 import pt.feup.jd.levels.triggers.Trigger;
 
@@ -42,6 +43,7 @@ public class Lever extends TileEntity implements Trigger {
 		level.game.tooltip = "Press "+Input.Keys.toString(JDGame.keyBindings.get(JDGame.Keys.USE))+" to toggle lever.";
 		
 		if (Gdx.input.isKeyJustPressed(JDGame.keyBindings.get(JDGame.Keys.USE))) {
+			Util.playSound(Assets.gate_lever);
 			on = !on;
 		};
 	}
