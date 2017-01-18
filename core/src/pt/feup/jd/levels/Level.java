@@ -61,6 +61,7 @@ public class Level {
 	
 	// Level switching
 	public boolean persistent;
+	public boolean checkpoint;
 	
 	public boolean levelChange;
 	public String targetLevel, targetSpawn;
@@ -104,6 +105,7 @@ public class Level {
 		targetLevel = null; targetSpawn = null;	
 		
 		persistent = !(map.getProperties().containsKey("volatile"));
+		checkpoint = !(map.getProperties().containsKey("notCheckpoint"));
 		
 		entities = new ArrayList<Entity>();
 		tileEntities = new HashMap<String, TileEntity>();
