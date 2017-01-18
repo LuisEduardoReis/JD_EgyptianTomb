@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="64" tileheight="64" nextobjectid="105">
- <tileset firstgid="1" name="tilesheet" tilewidth="64" tileheight="64" tilecount="256" columns="16">
+ <properties>
+  <property name="notCheckpoint" value="true"/>
+ </properties>
+ <tileset firstgid="1" name="tilesheet" tilewidth="64" tileheight="64" tilecount="256">
   <image source="../tilesheet.png" width="1024" height="1024"/>
   <tile id="0">
    <properties>
@@ -13,7 +16,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="257" name="spritesheet" tilewidth="64" tileheight="64" tilecount="64" columns="8">
+ <tileset firstgid="257" name="spritesheet" tilewidth="64" tileheight="64" tilecount="64">
   <image source="../spritesheet.png" width="512" height="512"/>
  </tileset>
  <layer name="background" width="16" height="12" opacity="0.9">

@@ -28,6 +28,8 @@ public class Coin extends Entity {
 		
 		applyGravity = true;
 		
+		invulnerable = true;
+		
 		hx = 4;
 		hy = 4;
 		

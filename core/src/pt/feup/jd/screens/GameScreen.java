@@ -140,6 +140,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	private void gotoLevel(String name, String spawn) {
 		Player player = null;
+		boolean comingFromCheckpoint = false;
 		
 		if (level != null) {
 			level.gotoLevel(null, null);
@@ -149,6 +150,7 @@ public class GameScreen extends ScreenAdapter {
 				return;
 			}
 			
+			comingFromCheckpoint = level.checkpoint;
 			player = level.player;
 			level.entities.remove(player);
 			
@@ -173,7 +175,7 @@ public class GameScreen extends ScreenAdapter {
 		level.gotoLevel(null, null);
 		level.gotoSpawn(spawn);
 		
-		saveCheckpoint();
+		if (level.checkpoint && comingFromCheckpoint) saveCheckpoint();
 	}
 	
 	private void saveCheckpoint() {

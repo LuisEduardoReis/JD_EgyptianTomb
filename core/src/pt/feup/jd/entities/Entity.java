@@ -38,7 +38,7 @@ public class Entity {
 	
 	public float health, max_health;
 	public float damage_anim_timer, damage_anim_delay;
-	public boolean dead;
+	public boolean dead, invulnerable;
 	
 	public boolean remove = true;
 	
@@ -71,6 +71,10 @@ public class Entity {
 		health = max_health = 100;
 		damage_anim_timer = 0;
 		damage_anim_delay = 1;
+		
+		dead = false;
+		invulnerable = false;
+		
 		remove = false;
 		
 		rotation = 0;
@@ -112,7 +116,7 @@ public class Entity {
 	}
 	
 	public void damage(float damage) {
-		if (dead) return;
+		if (dead || invulnerable) return;
 		health = Util.stepTo(health, 0, damage);
 		damage_anim_timer = damage_anim_delay;
 		Util.playSound(Assets.hurt);
