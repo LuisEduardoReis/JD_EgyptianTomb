@@ -34,7 +34,7 @@ public class Bullet extends Entity {
 		hx = 4;
 		hy = 4;
 		
-		damage = Float.parseFloat(JDGame.getDifficultyProperty("BULLET_DAMAGE", level.game.difficulty,"50.0"));
+		damage = Float.parseFloat(JDGame.getDifficultyProperty("BULLET_DAMAGE", JDGame.difficulty,"50.0"));
 	}
 	
 	@Override

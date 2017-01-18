@@ -30,7 +30,7 @@ public class Snake extends Enemy {
 		
 		if (!initSprites) initSprites();
 		
-		health = max_health = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_HEALTH", level.game.difficulty,"100"));
+		health = max_health = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_HEALTH", JDGame.difficulty,"100"));
 		
 		sprite = default_anim;
 		
@@ -39,15 +39,15 @@ public class Snake extends Enemy {
 		
 		vx = 32;
 		
-		walkSpeed = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_WALKSPEED", level.game.difficulty,"64"));
+		walkSpeed = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_WALKSPEED", JDGame.difficulty,"64"));
 		
 		turnOnBump = true;
 		turnOnEdge = true;
 		
-		contactDamage = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_CONTACT_DAMAGE", level.game.difficulty,"25"));
-		contactDamage_delay = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_CONTACT_DAMAGE_DELAY", level.game.difficulty,"1.0"));
+		contactDamage = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_CONTACT_DAMAGE", JDGame.difficulty,"25"));
+		contactDamage_delay = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_SNAKE_CONTACT_DAMAGE_DELAY", JDGame.difficulty,"1.0"));
 		
-		coinLoot = Integer.parseInt(JDGame.getDifficultyProperty("ENEMY_SNAKE_COIN_LOOT", level.game.difficulty,"3"));
+		coinLoot = Integer.parseInt(JDGame.getDifficultyProperty("ENEMY_SNAKE_COIN_LOOT", JDGame.difficulty,"3"));
 	}
 	
 	@Override

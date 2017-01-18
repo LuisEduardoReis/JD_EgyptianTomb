@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -22,18 +21,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import pt.feup.jd.Assets;
 import pt.feup.jd.FadeEffect;
 import pt.feup.jd.JDGame;
-import pt.feup.jd.JDGame.Difficulty;
 import pt.feup.jd.Util;
 import pt.feup.jd.entities.Player;
 import pt.feup.jd.levels.Level;
 
 public class GameScreen extends ScreenAdapter {
 	public final JDGame game;
-	public final Difficulty difficulty;
-	
-	public GameScreen(JDGame game, Difficulty difficulty) {
+	public GameScreen(JDGame game) {
 		this.game = game;
-		this.difficulty = difficulty;
 	}
 	
 	// Logic
@@ -50,7 +45,6 @@ public class GameScreen extends ScreenAdapter {
 	OrthographicCamera camera;
 	public Viewport viewport;
 	
-	BitmapFont font;
 	public SpriteBatch batch;
 	
 	ShapeRenderer shapeRenderer;
@@ -102,7 +96,6 @@ public class GameScreen extends ScreenAdapter {
 		camera = new OrthographicCamera();
 		viewport = new ScreenViewport(camera);
 		
-		font = new BitmapFont();
 		batch = new SpriteBatch();
 				
 		shapeRenderer = new ShapeRenderer();
@@ -141,6 +134,15 @@ public class GameScreen extends ScreenAdapter {
 	private void gotoLevel(String name, String spawn) {
 		Player player = null;
 		boolean comingFromCheckpoint = false;
+		
+		if (name.equals("controls")) {
+			game.setScreen(new SettingsScreen(game));
+			return;
+		}
+		if (name.equals("exit")) {
+			Gdx.app.exit();
+			return;
+		}
 		
 		if (level != null) {
 			level.gotoLevel(null, null);

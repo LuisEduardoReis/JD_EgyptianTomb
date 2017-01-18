@@ -23,7 +23,7 @@ public class HUD {
 		OrthographicCamera camera = game.camera;
 		SpriteBatch batch = game.batch;
 		Level level = game.level;
-		BitmapFont font = game.font;
+		BitmapFont font = Assets.font;
 		
 		
 		camera.position.set(sw/2,sh/2,0);

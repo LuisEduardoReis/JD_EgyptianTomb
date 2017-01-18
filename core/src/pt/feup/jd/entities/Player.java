@@ -77,8 +77,8 @@ public class Player extends Entity {
 		x = 0;
 		y = 0;
 		
-		health = Float.parseFloat(JDGame.getDifficultyProperty("PLAYER_STARTING_HEALTH", level.game.difficulty,"100"));
-		max_health = Float.parseFloat(JDGame.getDifficultyProperty("PLAYER_MAX_HEALTH", level.game.difficulty,"100"));
+		health = Float.parseFloat(JDGame.getDifficultyProperty("PLAYER_STARTING_HEALTH", JDGame.difficulty,"100"));
+		max_health = Float.parseFloat(JDGame.getDifficultyProperty("PLAYER_MAX_HEALTH", JDGame.difficulty,"100"));
 		
 		move_speed = Float.parseFloat(JDGame.getGlobalProperty("PLAYER_MOVE_SPEED", 5*JDGame.TILE_SIZE+""));
 		jump_speed = Float.parseFloat(JDGame.getGlobalProperty("PLAYER_JUMP_SPEED", Math.sqrt(2*15*2.5)*JDGame.TILE_SIZE+""));
@@ -164,7 +164,7 @@ public class Player extends Entity {
 			}
 		} else
 			if (Gdx.input.isKeyPressed(JDGame.keyBindings.get(JDGame.Keys.UP)) && jumpWindow>0 && !jumped) {
-				Util.playSound(Util.random.nextBoolean() ? Assets.jump1 : Assets.jump2);
+				Util.playSound(Assets.jump);
 				vy = jump_speed;
 				jumped = true;
 			}

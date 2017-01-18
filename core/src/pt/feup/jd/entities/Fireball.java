@@ -35,7 +35,7 @@ public class Fireball extends Entity {
 		
 		applyGravity = false;
 		
-		damage = Float.parseFloat(JDGame.getDifficultyProperty("FIREBALL_DAMAGE", level.game.difficulty,"25.0"));
+		damage = Float.parseFloat(JDGame.getDifficultyProperty("FIREBALL_DAMAGE", JDGame.difficulty,"25.0"));
 	}
 
 		

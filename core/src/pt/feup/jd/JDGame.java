@@ -35,6 +35,7 @@ public class JDGame extends Game {
 	public static enum Difficulty {
 		EASY, NORMAL, HARD
 	}
+	public static Difficulty difficulty;
 	
 	public static Properties global_props;
 	public static HashMap<Difficulty, Properties> difficulty_props;
@@ -47,9 +48,10 @@ public class JDGame extends Game {
 		initKeyBindings();
 		Assets.createAssets();
 		music_vol = 1;
-		sound_vol = 1;		
+		sound_vol = 1;	
+		difficulty = Difficulty.NORMAL;
 		loadProperties();		
-		setScreen(new GameScreen(this, Difficulty.NORMAL));
+		setScreen(new GameScreen(this));
 	}
 
 	private void loadProperties() {

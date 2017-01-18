@@ -27,22 +27,22 @@ public class Mummy extends Enemy {
 		
 		if (!initSprites) initSprites();
 		
-		health = max_health = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_MUMMY_HEALTH", level.game.difficulty,"100"));
+		health = max_health = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_MUMMY_HEALTH", JDGame.difficulty,"100"));
 		
 		sprite = default_anim;
 		
 		hx = 32;
 		hy = 48;
 		
-		walkSpeed = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_MUMMY_WALKSPEED", level.game.difficulty,"64"));
+		walkSpeed = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_MUMMY_WALKSPEED", JDGame.difficulty,"64"));
 		
 		follow_timer = 0;
 		follow_delay = 0.5f;
 		
-		contactDamage = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_MUMMY_CONTACT_DAMAGE", level.game.difficulty,"25"));
-		contactDamage_delay = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_MUMMY_CONTACT_DAMAGE_DELAY", level.game.difficulty,"1.0"));
+		contactDamage = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_MUMMY_CONTACT_DAMAGE", JDGame.difficulty,"25"));
+		contactDamage_delay = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_MUMMY_CONTACT_DAMAGE_DELAY", JDGame.difficulty,"1.0"));
 		
-		coinLoot = Integer.parseInt(JDGame.getDifficultyProperty("ENEMY_MUMMY_COIN_LOOT", level.game.difficulty,"3"));
+		coinLoot = Integer.parseInt(JDGame.getDifficultyProperty("ENEMY_MUMMY_COIN_LOOT", JDGame.difficulty,"3"));
 	}
 	
 	@Override

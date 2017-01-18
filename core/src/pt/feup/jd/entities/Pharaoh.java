@@ -32,20 +32,20 @@ public class Pharaoh extends Enemy {
 		
 		if (!initSprites) initSprites();
 		
-		health = max_health = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_PHARAOH_HEALTH", level.game.difficulty,"100"));
+		health = max_health = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_PHARAOH_HEALTH", JDGame.difficulty,"100"));
 		
 		sprite = default_anim;
 		
 		hx = 32;
 		hy = 48;
 			
-		attack_damage = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_PHARAOH_ATTACK_DAMAGE", level.game.difficulty,"25"));
-		attack_speed = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_PHARAOH_ATTACK_SPEED", level.game.difficulty,"192"));
+		attack_damage = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_PHARAOH_ATTACK_DAMAGE", JDGame.difficulty,"25"));
+		attack_speed = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_PHARAOH_ATTACK_SPEED", JDGame.difficulty,"192"));
 		
 		attack_timer = 0;
-		attack_delay = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_PHARAOH_ATTACK_DELAY", level.game.difficulty,"3.0"));
+		attack_delay = Float.parseFloat(JDGame.getDifficultyProperty("ENEMY_PHARAOH_ATTACK_DELAY", JDGame.difficulty,"3.0"));
 		
-		coinLoot = Integer.parseInt(JDGame.getDifficultyProperty("ENEMY_PHARAOH_COIN_LOOT", level.game.difficulty,"3"));
+		coinLoot = Integer.parseInt(JDGame.getDifficultyProperty("ENEMY_PHARAOH_COIN_LOOT", JDGame.difficulty,"3"));
 	}
 	
 	@Override
