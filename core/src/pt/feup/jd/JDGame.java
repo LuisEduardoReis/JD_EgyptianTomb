@@ -39,10 +39,15 @@ public class JDGame extends Game {
 	public static Properties global_props;
 	public static HashMap<Difficulty, Properties> difficulty_props;
 	
+	public static float music_vol;
+	public static float sound_vol;
+	
 	@Override
 	public void create() {
 		initKeyBindings();
-		Assets.createAssets();		
+		Assets.createAssets();
+		music_vol = 1;
+		sound_vol = 1;		
 		loadProperties();		
 		setScreen(new GameScreen(this, Difficulty.NORMAL));
 	}

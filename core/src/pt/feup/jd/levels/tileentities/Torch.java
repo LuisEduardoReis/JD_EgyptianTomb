@@ -3,6 +3,7 @@ package pt.feup.jd.levels.tileentities;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import pt.feup.jd.Assets;
+import pt.feup.jd.JDGame;
 import pt.feup.jd.Sprite;
 import pt.feup.jd.Util;
 import pt.feup.jd.levels.Level;
@@ -52,6 +53,6 @@ public class Torch extends TileEntity {
 	}
 	@Override
 	public void renderLight(SpriteBatch batch) {
-		Util.drawLight(batch, x, y, 4, 4, 1, 1, 0.5f, 1);
+		Util.drawLight(batch, x + JDGame.TILE_SIZE/2, y + JDGame.TILE_SIZE/2, 4, 4, 1, 1, 0.5f, 1);
 	}
 }

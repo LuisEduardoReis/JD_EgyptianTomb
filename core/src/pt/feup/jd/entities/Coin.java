@@ -59,6 +59,7 @@ public class Coin extends Entity {
 	
 	@Override
 	public void destroy() {
+		Util.playSound(Assets.pickup_coin);
 		level.game.addCoins(1);
 		super.destroy();
 	}

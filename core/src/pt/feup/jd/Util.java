@@ -2,6 +2,7 @@ package pt.feup.jd;
 
 import java.util.Random;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
@@ -71,5 +72,9 @@ public class Util {
 
 	public static float pointDirection(float x, float y, float x2, float y2) {
 		return (float) Math.atan2(y2-y,x2-x)*radToDeg;
+	}
+
+	public static void playSound(Sound sound) {
+		if (JDGame.sound_vol > 0) sound.play(JDGame.sound_vol);		
 	}
 }

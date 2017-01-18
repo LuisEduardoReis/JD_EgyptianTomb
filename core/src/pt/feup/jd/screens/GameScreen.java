@@ -44,6 +44,7 @@ public class GameScreen extends ScreenAdapter {
 	public int coins;
 	
 	float levelChangeTimer, levelChangeDelay;
+	float gameOverTimer, gameOverDelay;
 	
 	// Render
 	OrthographicCamera camera;
@@ -67,6 +68,14 @@ public class GameScreen extends ScreenAdapter {
 	
 	HUD hud;
 	
+	private String checkpointLevel;
+	private float checkpointHealth;
+	private int checkpointCoins;
+	private int checkpointAmmo;
+	private int checkpointHammer;
+	private float checkpointX;
+	private float checkpointY;
+	
 	@Override
 	public void show() {
 		
@@ -75,6 +84,8 @@ public class GameScreen extends ScreenAdapter {
 					
 		levelChangeTimer = -1;
 		levelChangeDelay = 1f;
+		gameOverTimer = -1;
+		gameOverDelay = 3f;
 		
 		fadeIn = new FadeEffect();
 		fadeIn.duration = 1.5f;
@@ -103,10 +114,16 @@ public class GameScreen extends ScreenAdapter {
 		hud = new HUD(this);
 					
 		// Start
-		gotoLevel("testing", null);
+		restart("main");
 		fadeIn();
 	}
 	
+	private void restart(String string) {
+		levels.clear();
+		level = null;
+		gotoLevel(string, null); 
+	}
+
 	public void fadeIn() {		
 		fadeIn.reset();
 		fadeIn.start();
@@ -152,9 +169,33 @@ public class GameScreen extends ScreenAdapter {
 		else level.addEntity(player);
 		level.player = player;
 		player.level = level;
-		
+			
 		level.gotoLevel(null, null);
 		level.gotoSpawn(spawn);
+		
+		saveCheckpoint();
+	}
+	
+	private void saveCheckpoint() {
+		checkpointLevel = level.name;
+		checkpointX = level.player.x;
+		checkpointY = level.player.y;
+		checkpointHealth = level.player.health;
+		checkpointCoins = coins;
+		checkpointAmmo = level.player.ammo;
+		checkpointHammer = level.player.hammerHits;		
+	}
+
+	private void loadCheckpoint() {
+		level = null;
+		levels.remove(checkpointLevel);
+		gotoLevel(checkpointLevel, null);
+		level.player.moveTo(checkpointX, checkpointY);
+		level.player.dead = false;
+		level.player.health = checkpointHealth;
+		level.player.ammo = checkpointAmmo;
+		level.player.hammerHits = checkpointHammer;
+		coins = checkpointCoins;
 	}
 	
 	float accum = 0;
@@ -221,7 +262,7 @@ public class GameScreen extends ScreenAdapter {
 
 	private void logic(float delta) {
 		// Logic
-		if (levelChangeTimer < 0 && !paused) {
+		if (levelChangeTimer < 0 && gameOverTimer < 0 && !paused) {
 		
 			if(accum > tickdelay) {
 				tooltip = null;
@@ -244,6 +285,14 @@ public class GameScreen extends ScreenAdapter {
 				fadeIn();
 			}
 		}	
+		if (gameOverTimer >= 0) {
+			gameOverTimer = Util.stepTo(gameOverTimer, 0, delta);
+			if (gameOverTimer == 0) {
+				gameOverTimer = -1;
+				loadCheckpoint();
+				fadeIn();
+			}
+		}
 		
 		fadeIn.update(delta);
 		fadeOut.update(delta);
@@ -273,6 +322,12 @@ public class GameScreen extends ScreenAdapter {
 		shader.end();
 		
 		viewport.update(width, height);
+	}
+
+	public void gameOver() {
+		if (gameOverTimer > 0) return;
+		fadeOut();
+		gameOverTimer = gameOverDelay;
 	}
 
 	

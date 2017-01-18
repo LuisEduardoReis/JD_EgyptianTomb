@@ -38,7 +38,7 @@
   </object>
   <object id="28" name="door2" type="door" x="1088" y="320" width="64" height="64">
    <properties>
-    <property name="targetLevel" value="testing_escape"/>
+    <property name="targetLevel" value="testing_escape_old"/>
     <property name="targetSpawn" value="door1"/>
    </properties>
   </object>

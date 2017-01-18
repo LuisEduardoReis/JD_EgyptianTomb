@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+import pt.feup.jd.Assets;
 import pt.feup.jd.JDGame;
 import pt.feup.jd.Sprite;
 import pt.feup.jd.Util;
@@ -114,6 +115,7 @@ public class Entity {
 		if (dead) return;
 		health = Util.stepTo(health, 0, damage);
 		damage_anim_timer = damage_anim_delay;
+		Util.playSound(Assets.hurt);
 	}
 	public void heal(float heal) {
 		if (dead) return;
