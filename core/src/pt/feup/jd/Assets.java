@@ -4,7 +4,6 @@ package pt.feup.jd;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -52,12 +51,12 @@ public class Assets {
 		
 		light = new Texture("light.png");
 		
-		vertexShader = new FileHandle("shaders/vertexShader.glsl").readString();
-		defaultFragmentShader = new FileHandle("shaders/defaultFragmentShader.glsl").readString();
-		fragmentShader =  new FileHandle("shaders/fragmentShader.glsl").readString();
+		vertexShader = Gdx.files.internal("shaders/vertexShader.glsl").readString();
+		defaultFragmentShader = Gdx.files.internal("shaders/defaultFragmentShader.glsl").readString();
+		fragmentShader =  Gdx.files.internal("shaders/fragmentShader.glsl").readString();
 		
 		
-		music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music1.wav"));
+		music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music1.mp3"));
 		music.setLooping(true);
 		gate_lever = Gdx.audio.newSound(Gdx.files.internal("sounds/gate_lever.wav"));
 		gun_fire = Gdx.audio.newSound(Gdx.files.internal("sounds/gun_fire.wav"));
