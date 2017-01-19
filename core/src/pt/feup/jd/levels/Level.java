@@ -2,6 +2,8 @@ package pt.feup.jd.levels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
@@ -31,6 +33,7 @@ import pt.feup.jd.levels.tileentities.Gate;
 import pt.feup.jd.levels.tileentities.Lever;
 import pt.feup.jd.levels.tileentities.TileEntity;
 import pt.feup.jd.levels.tileentities.Torch;
+import pt.feup.jd.levels.tileentities.Treasure;
 import pt.feup.jd.levels.tileentities.shop.AmmoPack;
 import pt.feup.jd.levels.tileentities.shop.HammerPile;
 import pt.feup.jd.levels.tileentities.shop.HealthPack;
@@ -164,6 +167,12 @@ public class Level {
 					tileEntities.put(lever.name, lever);
 					triggers.put(lever.name, lever);
 				}
+				// Lever
+				else if (type.equals("treasure")) {
+					Treasure treasure = new Treasure(this, o.getName(), p.x,p.y);
+					tileEntities.put(treasure.name, treasure);
+					triggers.put(treasure.name, treasure);
+				}
 				// BrokenBlock
 				else if (type.equals("brokenblock")) {
 					BrokenBlock block = new BrokenBlock(this, o.getName(), p.x,p.y);
@@ -294,6 +303,12 @@ public class Level {
 		for(int i = 0; i < entities.size(); i++) 
 			if (entities.get(i).remove)
 				entities.remove(i).destroy();
+		Iterator<Map.Entry<String,TileEntity>> i = tileEntities.entrySet().iterator();
+		while(i.hasNext()) {
+			Map.Entry<String,TileEntity> e = i.next();
+			if (e.getValue().remove) i.remove();
+		}
+		
 		
 		// Post update
 		for(Entity e : entities) e.postupdate(delta);

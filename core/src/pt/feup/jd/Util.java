@@ -75,6 +75,6 @@ public class Util {
 	}
 
 	public static void playSound(Sound sound) {
-		if (JDGame.sound_vol > 0) sound.play(JDGame.sound_vol);		
+		if (JDGame.sound_on) sound.play();		
 	}
 }

@@ -17,6 +17,7 @@ public class TileEntity {
 	public int xi, yi;
 	public TextureRegion sprite;
 	public float rotation;
+	public boolean remove;
 	
 	public TileEntity(Level level, String name, float x, float y) {
 		this.level = level;
@@ -27,6 +28,7 @@ public class TileEntity {
 		this.y = yi * JDGame.TILE_SIZE;
 		
 		this.rotation = 0;
+		this.remove = false;
 	}
 	
 	public void update(float delta) {

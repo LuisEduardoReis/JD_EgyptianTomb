@@ -301,9 +301,17 @@ public class GameScreen extends ScreenAdapter {
 		fadeIn.update(delta);
 		fadeOut.update(delta);
 				
-		if (Gdx.input.isKeyJustPressed(Input.Keys.D)) JDGame.DEBUG ^= true;
+		
 		
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
+		
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) gotoLevel("testing", null);
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) gotoLevel("testing2", null);
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F3)) gotoLevel("testing3", null);
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) gotoLevel("testing4", null);
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) gotoLevel("testing_escape", null);
+		
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F6)) JDGame.DEBUG ^= true;
 	}
 	
 	public void addCoins(int v) {coins += v;}
