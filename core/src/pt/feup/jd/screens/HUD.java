@@ -59,7 +59,10 @@ public class HUD {
 			// Timer
 			if (level.trapTimer != -1) {
 				int t = (int) Math.floor(level.trapTimer);
-				String timerText = String.format("%d:%02d", t / 60, t % 60);
+				int minutes = t / 60;
+				int seconds = t % 60;
+				
+				String timerText = minutes + ":" + (seconds < 10 ? "0":"")+seconds;
 				font.getData().setScale(3f);
 				layout.setText(font, timerText);
 				font.draw(batch, layout, (sw - layout.width)/2, sh-16);

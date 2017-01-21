@@ -3,7 +3,6 @@ package pt.feup.jd;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Properties;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -82,11 +81,11 @@ public class JDGame extends Game {
 	@Override
 	public void dispose() {
 		super.dispose();
+			
 		
-		/*
 		try {
 			FileHandle file = Gdx.files.local("/properties/main.properties");
-			global_props.store(file.write(false), null);
+			global_props.store(file.write(false));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -95,11 +94,11 @@ public class JDGame extends Game {
 			Properties prop = difficulty_props.get(dif);
 			try {
 				FileHandle file = Gdx.files.local("/properties/"+dif.toString().toLowerCase()+".properties");
-				prop.store(file.write(false), null);
+				prop.store(file.write(false));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}		
-		}*/
+		}
 	}
 	
 	

@@ -140,6 +140,7 @@ public class GameScreen extends ScreenAdapter {
 			return;
 		}
 		if (name.equals("exit")) {
+			level.gotoLevel(null, null);
 			Gdx.app.exit();
 			return;
 		}
